@@ -1,0 +1,802 @@
+v0.26.164 / Stage24.49.1
+- Adds the public project attribution `ARM64 reconstruction by WhiteMsf` as the final line of the original About/Credits text flow.
+- Leaves Rovio's localized credit text intact as the prefix and does not edit proprietary localization assets.
+- Reuses the untouched About page's own clipping, scrolling, font selection and renderer; no synthetic credits screen or fixed-position overlay is introduced.
+- Public Release envelope remains 1.0.0; Audit metadata advances to 0.26.164 / 26164.
+
+v0.26.163 / Stage24.49.0C
+- Tooling-only hotfix for the Stage24.48.1 release-branding preflight rejecting current audit metadata after v0.26.160.
+- Branding version validation is now semantic and cross-checks manifest versionName, semver-derived versionCode and the current README release heading.
+- The top-level release-engineering contract runs the nested branding contract before prompting for a password or building either APK.
+- Engine and CMake bytes remain frozen.
+
+v0.26.161 / Stage24.49.0A
+- Tooling-only hotfix for timezone-naive ZIP mtimes causing Ninja infinite `Re-running CMake` loops after Windows extraction.
+- Build now normalizes only CMakeLists.txt LastWriteTime before configure; content SHA remains frozen.
+- Existing permanent release key is reused; runtime/physics/lifecycle code unchanged.
+
+v0.26.156 / Stage24.47.6A
+- Tooling-only hotfix: lifecycle ARMv7 JNI acquisition now merges normal + dynamic llvm-nm symbol tables.
+- Keeps v0.26.155 lifecycle resume implementation unchanged.
+- Fixes false build failure before the multitasking runtime test.
+
+v0.26.155 / Stage24.47.6
+- Fixed NativeActivity Recents/background lifecycle: APP_CMD_TERM_WINDOW now preserves the live engine instead of calling stage24_stop_engine().
+- Added quiescent handshake and generation-tracked ANativeWindow publication.
+- Recreates only EGLSurface on APP_CMD_INIT_WINDOW while retaining EGLContext, textures, Lua state, Box2D world and current game/menu state.
+- APP_CMD_DESTROY remains the teardown owner.
+- Added lifecycle audio gate that restores the pre-background game-owned output state.
+- Added ARMv7 MyRenderer JNI lifecycle acquisition, static lifecycle contract, runtime report and focused Recents test.
+
+v0.26.154 / Stage24.47.5
+- Keeps all recovered rubber/contact/joint constants untouched and tests an architecture-level numerical-fidelity hypothesis instead.
+- Builds pinned Box2D 2.1.2 and the live bridge with `-ffp-contract=off`, matching the ARMv7 oracle's separate scalar float operation/rounding boundaries rather than allowing AArch64 FMADD/FMSUB contraction.
+- Adds a post-build ARMv7/AArch64 disassembly audit that fails closed if fused multiply-add/subtract survives in relevant physics functions.
+- Adds observe-only world joint-list order telemetry for rubber distance-joint networks and explicitly does not equate that list with island DFS solver order.
+- Resets only Stage47.x diagnostic line budgets on level change so GE3 cannot starve the later 8-3 control sample.
+- No restitution, fixture, body, joint, contact, Lua, score, unlock or save mutation.
+
+v0.26.153 / Stage24.47.4
+- Stage24.47.3 runtime hit 8-3 and LevelGE_3, not the requested free-ball LevelGE_2 isolation case; no isolatedCandidate=true witness was produced.
+- Cross-proof of the ARMv7 b2ContactSolver now confirms the restitution velocityBias and one-point normal impulse accumulation path are pinned-2.1.2-compatible; restitution=5.5 remains untouched.
+- Corrects Stage24.47.1 telemetry interpretation: Box2D PostSolve is emitted by b2Island::Report after velocity finalization, linear/angular clamp + position integration and position solving, so prior postSolver velocities were already post-island/clamped.
+- Adds read-only manifold warm-start telemetry (CONTACT_PRE vs CONTACT_POST normal/tangent impulses) and rubber-body integration telemetry (position delta, |v|*dt, |w|*dt, linear/angular cap flags).
+- Adds ARMv7 acquisition for b2Contact::Update, b2ContactSolver::FinalizeVelocityConstraints, b2Island::Solve, b2Island::Report and b2World::Step beside the pinned 2.1.2 source.
+- No contact, fixture, body, joint, warm-start, Lua, score, unlock or gameplay mutation.
+
+v0.26.152 / Stage24.47.3
+- Stage24.47.2 closes the obvious distance-joint/timestep hypotheses: original b2DistanceJoint solver dataflow is structurally pinned-2.1.2-compatible and original world.Step is exactly 1/30,10,10.
+- Moves the legacy rubber "molenga" investigation to the high-restitution contact solver without changing restitution=5.5.
+- Acquires untouched ARMv7 b2ContactSolver constructor, InitVelocityConstraints and SolveVelocityConstraints beside pinned Box2D 2.1.2.
+- Extends the read-only rubber witness with joint/contact counts, automatic isolated-contact classification, and diagnostic pre/post normal-velocity ratios.
+- Uses LevelGE_2 free ExtraRubberBall contacts as the contact-only isolation case and LevelP3_306 / 8-3 as the distance-joint cross-check.
+- No contact, fixture, body, joint, Lua, score, unlock or gameplay mutation.
+
+v0.26.151 / Stage24.47.2
+- Reframes the long-standing rubber "molenga" mismatch as a distance-joint spring-solver fidelity audit instead of guessing a restitution fix.
+- Acquires untouched ARMv7 b2DistanceJoint constructor, InitVelocityConstraints, SolveVelocityConstraints and SolvePositionConstraints bodies beside the pinned Box2D 2.1.2 source.
+- Adds observe-only pre/post Step telemetry for rubber-owned distance joints: rest/current length, error, normalized strain, anchors, endpoint velocities, axis-relative speed, frequency/damping and reaction force.
+- Any rubber contact opens a short dense sampling window; output is ranked/capped and contains no Box2D/Lua mutators.
+- Keeps Stage24.43.1 exact type=1 joint construction (4 Hz, dampingRatio 0.5), Stage24.47.1 contact audit, fixed world.Step(dt,10,10), campaign closure and Golden Eggs ownership unchanged.
+
+v0.26.150 / Stage24.47.1
+- Adds a read-only rubber/beachball physics audit for the long-standing mismatch reproduced independently by Golden Egg 2 (LevelGE_2) and Danger Above 8-3 (LevelP3_306).
+- Captures material-owned rubber contacts at BeginContact/pre-solver, first PostSolve impulse, and post-world.Step velocity/angular state for both bodies.
+- Logs fixture/Lua friction+restitution, stock-proven mixed coefficients, relative normal velocity, mass/inertia, and mutable Rovio b2_maxTranslation clamp candidates.
+- Latest GE2 witness already shows SmallBlueBird_1c jumping from speed 12.3878582 before ExtraRubberBall_23 contact to 41.6385336 on the touching frame.
+- Changes no physics constants or contact/body state; all prior ARMv7 body-fixture, restitution-threshold, material-mix, tolerance and max-translation contracts remain authoritative.
+
+v0.26.149 / Stage24.47.0A
+- Live Golden Eggs witness: slot 11 resolved to LevelGE_7 and failed before chunk execution because untouched menu path `levels/goldeneggs1/...` is relative to the original `data/` resource root.
+- Reconstructs generic Stage24 Lua level resource search for `levels/...` -> `<Stage24Root>/data/levels/...`; no LevelGE filename/slot special case.
+- Keeps all Golden Egg unlock/completion/star ownership in untouched Lua/save.
+
+﻿v0.26.148 / Stage 24.47.0
+- Live-closes the full chapter campaign: pack11 15/15, theme11Completed=true, gameCompleted=true, and stock gameFinishedLP4 -> levelComplete -> theme11Complete.
+- Enters Golden Eggs from the user's first real menu witness: slot 3 resolves exactly to levels/goldeneggs1/LevelGE_2 and previously failed only because that original file was not staged.
+- Transports all 15 original LevelGE_1..15 gameplay files proven by untouched levelOrder_goldenEggs.
+- Adds a read-only exact 19-slot Golden Eggs observer: 15 gameplay entries plus SOUNDBOARD1, RADIO, KEYBOARD and SEQUENCER.
+- Keeps openGoldenEggLevels, goldenEggStarAchieved, completion/stars and soundboard behavior wholly Lua/save-owned; no synthetic unlocks.
+
+v0.26.146 / Stage 24.46.2
+- Live-closes The Big Setup page1/pack9: 15/15 completions persisted and stock LevelP4_441 -> theme9Complete observed.
+- Confirms the ARMv7-derived non-repeat crane branch across scene themes 9, 10 and 11 with no fatal GPU/Lua/native regression.
+- Adds exact untouched pack10 transport for The Big Setup 10-1..10-15 and a read-only levelSelectionPagesPack4 map observer.
+- Keeps scene evolution, completion, Next and theme10Completed entirely Lua/data-owned; no per-level hacks.
+
+v0.26.145 / Stage 24.46.1
+- Reconstructs the exact original ARMv7 GameLua::drawBackground() repeat=false branch first exercised by The Big Setup Theme9 crane layers.
+- Uses untouched Lua layer values: transformX=offset-trunc(offset), drawX=offset-(topLeftX*parallax)/layerScale, drawY=-topLeftY/layerScale, one sprite draw with no tiling.
+- Applies the same recovered non-repeat path to gameplay and menu-owned theme rendering; removes the previous fail-closed boundary.
+- Adds fail-closed Stage24.46.1 preflight against the captured original ARMv7 drawBackground disassembly.
+- Theme9 remains generic/Lua-owned; no Theme9-specific rendering constants or level hacks are introduced.
+
+v0.26.144 / Stage 24.46.0
+- Closes v0.26.143 Danger Above Theme8 from persisted Lua evidence despite a mid-run phone reboot; all 15 pack8 highscores are completed and stock 8-15 transitions to theme8Complete.
+- Enters The Big Setup with exact untouched pack9 9-1..9-15 transport and read-only levelSelectionPagesPack4 context observer (themeIndex=9/world=9/page=1).
+- Stages original INGAME_PARALLAX_CRANES metadata/texture as discovery coverage while leaving the generic live blockTable.themes[theme9] table authoritative for exact scene composition.
+- Adds no Theme9 completion override, level-specific gameplay branch, or guessed terrain/scene mapping.
+
+v0.26.143 / Stage 24.45.1
+- Live-validates full Danger Above Theme7 page 7-1..7-15 and stock transition to theme7Complete with no fatal/GL regression.
+- Closes Danger Above content transport with exact pack8 8-1..8-15 map and read-only original page/context observer.
+- Adds exact Theme8 scene transport: INGAME_SKIES_2, INGAME_PARALLAX_8, INGAME_GROUNDS_1, INGAME_THEME_GROUND_8.
+- Keeps stock Lua progression/theme8 completion ownership; no level-specific gameplay hacks.
+
+v0.26.142 / Stage 24.45.0
+- Live-validates Stage24.44.3 Android setGameOn/allowSleep closure (15 runtime calls, no fatal regression).
+- Resumes Danger Above with exact pack7 7-1..7-15 transport and read-only original map/context observer.
+- Adds exact Theme7 scene transport: INGAME_SKIES_2, INGAME_PARALLAX_7, INGAME_GROUNDS_1, INGAME_THEME_GROUND_7.
+- Keeps stock Lua progression/theme7 completion ownership; no level-specific gameplay hacks.
+
+﻿v0.26.118 / Stage 24.36.0
+- Runtime-validates v0.26.117 theme2 terrain generalization through completed 2-5/Level88; untouched Bomb BOMB/special_explosion path works without a native Bomb hack.
+- Transports untouched Pack2 continuation 2-6..2-14 using recovered levelOrder.pack2 mapping: Level36, Level31, Level21, Level41, Level76, Level38, Level35, Level20, Level26.
+- Adds read-only Pack2 map/next-level telemetry through 2-14 and a generic DROPPABLE_EGG createCircle observer.
+- Leaves White behavior wholly owned by untouched updateGame; no native egg-drop implementation is added.
+
+v0.26.99 / Stage24.31.3
+- Adds audit-only UI micro-fidelity telemetry for the Main Menu settings gear, About/Credits Golden Egg star effect, and straight UI/composprite seam artifacts.
+- Captures exact ARM64 sprite rect/pivot/UV/quad/render-state data and compares submitted edge UVs with hypothetical half-texel bounds without changing rendering.
+- Adds untouched ARMv7 SpriteSheet/CompoSprite/setRenderState static audit so the next fix is evidence-driven rather than a global sampling/pivot guess.
+
+v0.26.95 / Stage 24.30.4
+- Fixes the actual v0.26.94 black-screen root cause: supplemental MENU/OTHER DATs were staged into the APK but two historical hardcoded C++ lists still controlled runtime extraction and SpriteDB loading, so GOLDEN_EGGS_SHEET_2 remained non-resident.
+- Adds one authoritative ordered bootstrap-menu-meta.txt generated from the concrete edition corpus; runtime uses the same manifest for APK extraction and SpriteDB loading, eliminating build/runtime sheet-list drift.
+- Keeps CUTSCENES_* outside the bootstrap manifest so first-entry story sheets remain truly dynamic.
+
+v0.26.94 — Stage 24.30.3 Pre-GPU Menu Resource Closure Hotfix
+- Fixes the second startup black-screen frontier exposed by v0.26.93: untouched pre-loader `loadImages(OTHER/MENU)` requests concrete original sheets beyond the older minimal bootstrap registry, first proving `GOLDEN_EGGS_SHEET_2.dat`.
+- Makes concrete edition-local supplemental MENU/OTHER sheets resident before the pre-GPU replay so force=false `res.createSpriteSheet` reuses them without requiring GLES; missing edition-specific candidates are skipped, never fabricated.
+- Keeps all six `CUTSCENES_*` sheets dynamic and out of the bootstrap registry so first-entry story ownership remains with untouched `loadCutScenes()`.
+- Adds a fail-closed build guard requiring the exact `GOLDEN_EGGS_SHEET_2.dat` frontier proven by the v0.26.93 runtime.
+
+v0.26.93 — Stage 24.30.2 Pre-GPU Dynamic-Sheet Bootstrap Hotfix
+- Fixes the v0.26.92 startup black-screen regression: untouched pre-loader image replay may call `res.createSpriteSheet(..., false)` before the GLES renderer exists, and already-resident sheets must be reusable without a GPU bridge.
+- Moves the dynamic-GPU readiness gate after the existing-sheet reuse path; only genuinely dynamic upload/recreate requests require the Stage24.30.1 GPU owner.
+- Adds explicit `stage24.30.2-pre-gpu-reuse` evidence while preserving fail-closed behavior for non-resident dynamic requests before renderer initialization.
+- Cutscene dynamic loading, release ownership, texture transport, and 2/4/5/7-argument `setRenderState` behavior remain unchanged from v0.26.92.
+
+v0.26.92 — Stage 24.30.1 Dynamic Cutscene SpriteSheet + Render-State Closure
+- Replaces the Stage24.30.0 audit-only `_G.res.createSpriteSheet` probe with the recovered dynamic resource contract: original cutscene DATs enter the shared SpriteDB/global sprite registry only when untouched Lua requests them.
+- Adds matching `_G.res.releaseSpriteSheet` ownership for bridge-loaded sheets, including global-owner restoration and reference-counted GLES texture release; preserves the untouched Lua `releaseCutScenes` closure.
+- Stages the six Stage24.30.0-proven CUTSCENES DATs plus their exact original texture transports at local build time without redistributing Rovio payloads in the source ZIP.
+- Restores progressive ARMv7 `setRenderState` arities 2/4/5/7; the first-entry `gameStart` path can now use translation+scale with four arguments instead of aborting.
+- Does not synthesize cutscene frames, timers, scrolling, sound, or the gameplay handoff: original Lua remains the sole story owner.
+- Adds Stage24.30.1 dynamic-sheet/render-state runtime and fail-closed static contract reports.
+
+v0.26.81 — Stage 24.26.2 Original Trajectory Renderer Implementation
+- Restores the original two-bank x three-slot normal/puff trajectory storage behind startNewTrajectory/addToTrajectory/addPuffToTrajectory using the Stage24.26.0 ARMv7 contract.
+- Resolves the final Stage24.26.1 draw resource exactly: the 12-byte puff literal in the untouched drawGame PIC cluster is BIRD_SPECIAL; build preflight fail-closes against the original ARMv7 library and INGAME_BIRDS_1.dat.
+- Restores the drawGame trajectory layer after native pass1 and before pass2, traversing slot0..5 with normal-then-puff order; normal points cycle TRAIL_WHITE_1/2/3 and puff points use BIRD_SPECIAL.
+- Preserves original SPRT pivots at stored world-pixel coordinates and uses the existing gameplay camera/worldScale transform; no unproven fade, lifetime, scale multiplier, rotation, or alpha behavior is synthesized.
+- Mirrors untouched GameLua::loadLevel ownership by clearing all six normal + six puff arrays on every level load while preserving the current bank selector, preventing stale trails across Restart/level changes.
+- Adds stage24.26.2 trajectory implementation/runtime diagnostics. Box2D and the separately suspected Red settle/remove delay are unchanged and reserved for Stage24.27.0 audit.
+
+v0.26.80 — Stage 24.26.1 Native Trajectory Renderer & Puff Contract Audit
+- Identifies untouched GameLua::drawGame as the direct consumer of both recovered trajectory array families and proves six-slot traversal with normal-then-puff ordering per slot.
+- Recovers the normal draw pattern as TRAIL_WHITE_1/2/3 cycling per point and places the entire trajectory layer after native gameplay pass1 and before pass2.
+- Extends untouched Lua bytecode telemetry to resolve addPuffToTrajectory producer specialties (BOOST, CLUSTER_BOMB, GRENADE, BOOMERANG); a PUFF runtime call remains optional on the Red 1-1 path.
+- Keeps ARM64 trajectory rendering headless in this audit revision; the final 12-byte puff draw literal is left for fail-closed resolution before implementation.
+
+v0.26.79 — Stage 24.26.0 Original Trajectory System Contract Audit
+- Stage24.25.8 closes the observable audio subsystem; this stage moves to the next actively exercised headless GameLua boundary instead of changing audio again.
+- Keeps startNewTrajectory/addToTrajectory/addPuffToTrajectory behaviorally headless and replaces only their generic stubs with diagnostic no-op probes.
+- Dumps untouched loaded Lua closure ownership for trajectory calls/state, including raw callsite PC windows around startNewTrajectory/addToTrajectory/addPuffToTrajectory, birdTrajectory, recordTrajectory, and allowTrajectoryClearing.
+- Runtime probes record exact argc/arg1/x/y, point deltas and spacing, generation/lifecycle counters, bird/mode state, birdTrajectory length, and the Lua callsite/PC without storing or drawing trajectory data.
+- Adds a focused ARMv7 native trajectory contract report covering GameLua method symbols/disassembly, existing binding recon, original script provenance, library strings, and candidate original image metadata.
+- Adds stage24.26.0-trajectory-runtime.txt and stage24.26.0-trajectory-lua-contract.txt to the pulled diagnostic bundle; PUFF is not required to occur during the Level 1-1 Red validation path.
+- No trajectory pixels, spacing, lifetime, clearing, cap, puff behavior, or sprite choice are guessed in this revision. Audio behavior is unchanged from v0.26.78.
+
+v0.26.78 — Stage 24.25.8 Audio Lifecycle Closure Audit
+- Stage24.25.7 live evidence decodes and plays three original MP3 cues successfully (level-start, ambient_theme1 loop, and level-clear) while WAV SFX remain active; OpenSL callbacks are continuously non-zero and stderr is clean.
+- Adds diagnostic-only per-voice EOF/END and LOOP_WRAP telemetry to prove the recovered AudioClipInstance lifecycle against real runtime audio rather than static disassembly alone.
+- Adds isAudioPlaying/stopAudio/stopAllAudio and output start/stop telemetry without changing their behavior.
+- Dumps the untouched 27-entry audioGroups table and records exact runtime provenance for the repeatedly requested but unregistered ground_collision alias instead of inventing a replacement sound.
+- Adds a focused ARMv7 lifecycle/ground-collision contract report covering AudioOutput/AudioMixer start/stop, master/track gain, clip stop/query/cleanup, original script string provenance, and matching payload filenames.
+- No intended playback semantics change from v0.26.77; MediaCodec remains an explicitly documented ARM64 MP3 decoder compatibility boundary rather than a claim of bit-identical mpg123 internals.
+
+v0.26.77 — Stage 24.25.7 Original MP3/Music Playback
+- Stage24.25.6 closes the original AudioClipInstance EOF/loop boundary: +0x18 is loop, +0x1a is ended; zero-byte fetch with loop=true rewinds AudioClipCursor offsets +0x8/+0x0c and continues filling, while non-loop EOF marks ended for mixer removal.
+- Registers the 18 untouched MP3 aliases through the same original createAssets/audioGroups replay already used by WAV.
+- Adds lazy Android NDK MediaExtractor/MediaCodec audio/mpeg decode as an ARM64 compatibility decoder; decoded signed PCM rejoins the existing recovered OpenSL software mixer. Original ARMv7 used mpg123, so decoder internals are not claimed bit-identical.
+- Preserves original Lua play/loop/track/handle ownership and the ARMv7-proven track-volume clamp; WAV SFX behavior is unchanged.
+- Forces `aapt -0 mp3` so original APK MP3 assets remain FD-addressable for MediaExtractor.
+- Adds stage24.25.7-mp3-playback.txt diagnostics. No Rovio audio payload is redistributed in this source ZIP.
+
+v0.26.76 — Stage 24.25.6 AudioClipInstance EOF/Loop Ownership Audit
+- Stage24.25.5 closes the audio-ramp lifecycle: audioRampVolume/audioRampLength start nil; only changeAudio initializes them, while updateMenu/updateSoundboard update/clear the shared ramp. A level-complete page reached without toggling SFX creates no ramp and performs no post-bootstrap track-volume writes.
+- This proves the previously observed positive runaway after re-enabling SFX is original Lua lifecycle behavior: changeAudio sets audioRampLength=+0.5, updateMenu has only a <=0 termination branch, and the native AudioMixer clamps stored track volume to [0,1].
+- MP3 remains intentionally unimplemented.
+- Adds a focused untouched ARMv7 audit for AudioClipInstance::fetchData, AudioClipCursor, AudioMixer::flushQueueAndRemoveEndedClips, voice stop/query methods, and the mixer->fetchData->AudioClip::getData->AudioReader::readData chain.
+- No audio behavior is changed in this revision.
+
+v0.26.75 — Stage 24.25.5 Audio Ramp Owner + MP3 Decode/Loop Audit
+- Stage24.25.4 proved untouched Lua raw track-volume overshoot is distinct from original native AudioMixer storage, which clamps to [0,1].
+- Added read-only exact-VM telemetry for every runtime SETGLOBAL write to audioRampVolume/audioRampLength while original updateMenu owns execution.
+- Added recursive untouched-Lua writer inventory with exact Proto/PC instruction windows and initial global values.
+- Added ARMv7 AudioReader/AudioClip/AudioMixer MP3 decode, read, reset, EOF/loop ownership audit; still no MP3 playback implementation.
+- Pause SFX toggle is not hand-patched; proven native track clamp remains the only audio behavior restoration in this audit build.
+
+v0.26.74 / Stage24.25.4 — complete audio fidelity audit
+- Preserves working Stage24.25.2a WAV SFX playback.
+- Mirrors the already-proven untouched ARMv7 AudioMixer::setTrackVolume clamp [0,1], while logging raw Lua requests separately.
+- Adds recursive original-Lua SFX/music/menu callback ownership audit and exact VM callsite telemetry.
+- Adds ARMv7 createAudio/AudioReader/AudioClip/MP3 decode-path audit and untouched MP3 header inventory.
+- MP3/music remains intentionally unimplemented until this evidence closes the original ownership/format path.
+
+v0.26.73 / Stage 24.25.3 — audio output callback audit
+- Diagnostic-only instrumentation at the software-mixer -> OpenSL boundary after Stage24.25.2 registered 184 aliases/166 WAVs and emitted real PLAY calls but the device remained silent.
+- Logs decoded clip PCM peak, primed-buffer peaks, OpenSL play state, buffer-queue count/index, callback/enqueue cadence, callback PCM peak, and active voices.
+- No playback semantics, Lua audio ownership, track/volume behavior, or asset registration are changed.
+
+v0.26.72a / Stage 24.25.2a — createAssets audio replay hotfix
+- Fixes the first WAV playback test being completely silent: the isolated untouched createAssets() replay still executed loadImages(), which re-entered res.createSpriteSheet() and aborted before the first createAudio call.
+- Neutralizes only that already-replayed loadImages() prefix in the audio-only environment; the untouched createAssets() bytecode still owns all createAudio registrations and audioGroups construction.
+- Leaves the separately observed pause-menu SFX volume-animation anomaly unmodified for a dedicated audit.
+
+v0.26.72 / Stage 24.25.2 — original WAV SFX playback
+- Stage24.25.1a proves the real untouched payload root is assets/data/audio: 168 WAV files, all PCM 16 kHz signed 16-bit (167 mono + 1 stereo).
+- Replays untouched createAssets() in an isolated Lua environment so original bytecode owns all 184 createAudio registrations and audioGroups construction; no handwritten alias/group table.
+- Packages the user's local original audio subtree into the built APK only; no Rovio audio payload is redistributed in this project ZIP.
+- Adds an OpenSL ES 16 kHz/16-bit software mixer implementing the recovered WAV play/loop/handle/stop/query plus track/master-volume and audio-output controls.
+- Adds backend cleanup across NativeActivity engine/window restarts and stage24.25.2-audio-playback.txt runtime telemetry.
+- MP3 registration is preserved but playback intentionally remains unsupported in this stage; music/ambient/level-start-complete cues are not yet closed.
+
+v0.26.71a / Stage 24.25.1a
+- Fixes WAV-audit preflight: missing assets/data/sfx is diagnostic, not fatal.
+- Falls back to recursive WAV discovery under assets/data; zero WAVs now reports nonfatally.
+
+﻿v0.26.71 / Stage 24.25.1 — audio mixer/WAV backend contract audit
+- Stage24.25.0 proves playAudio(name, volume=1, loop=false, track=0) -> numeric handle and dual name/handle isAudioPlaying ownership; playback remains intentionally headless.
+- Adds ARMv7 AudioOutput/AudioMixer/AudioClip backend disassembly for play/stop/query/handle ownership before choosing an Android replacement backend.
+- Audits every untouched local assets/data/sfx WAV header and groups exact codec/channels/sample-rate/bit-depth/block-align/byte-rate signatures; original WAVs are not redistributed.
+- Replaces the old silent playAudio no-op with diagnostic telemetry that logs untouched runtime name/volume/loop/track and returns the original missing-clip sentinel -1; no sound is emitted.
+- Logs live audioPath/audioGroups state to prove whether the bypassed createAssets audio-registration/group slice still needs restoration.
+
+v0.26.70 / Stage 24.25.0 — original audio-system contract audit
+- Particle runtime validation from v0.26.69 closes the visible custom particle path: 235 born / 235 expired, max active 83, missing=0, with soft-limit reductions observed in live gameplay.
+- Starts audio as the next missing original subsystem; playback remains intentionally headless in this stage.
+- Adds untouched Lua audio-owner audit around createAssets/getAudioName/collision/menu/update producers and inventories the current res audio surface.
+- Adds ARMv7 native disassembly audit for LuaResources/Resources/AudioOutput create/play/stop/query and track/master-volume methods.
+- No guessed audio handles, track routing, loop semantics, volume state, or backend implementation.
+
+v0.26.69 / Stage 24.24.2 — original custom gameplay particles visible
+- Replaces the historical headless particles.addParticles surface with the recovered ARMv7 Particles wrapper contract.
+- Uses untouched particleTable.particles definitions from particles.lua for all 19 particle types.
+- Restores exact soft/hard emission policy: softLimit=40, softFactor=0.5, hardLimit=125, with arg8 bypass semantics.
+- Restores random birth rectangle rotation, per-axis velocity, gravity, angular velocity, start/end scale interpolation, lifetime removal, and animation=lifeTime sprite sequencing.
+- Draws particles from the original INGAME_BIRDS_1 atlas at the recovered drawGame boundary: after all native object passes and before foreground.
+- Keeps straight-alpha GLES1 rendering and original sprite pivots; no particle fade curve is invented because the custom wrapper has none.
+- Adds stage24.24.2-visible-particles.txt runtime diagnostics.
+- Stage24.24.1 atlas audit also proves MENU_BUTTON is intentionally translucent in the original RGBA4444 texture (no fully opaque texels); no HUD alpha correction is applied.
+
+v0.26.68 / Stage 24.24.1 — exact particle emitter/limit + HUD alpha provenance audit
+- Keeps particles.addParticles headless, but corrects the historical Stage16 argument labels to the proven native signature: type,count,x,y,width,height,angle,bypassLimits.
+- Adds an exact ARMv7 emitter/limit/update contract report: soft factor 0.5, soft limit 40, hard limit 125, bypass semantics, rotated randomized birth rectangle, random field ownership, ParticleData update and lifetime sprite animation.
+- Audits raw original RGBA4444 alpha/color texels for MENU_BUTTON and comparison pause controls; no alpha/blend/sprite visual fix is applied yet.
+- Diagnostic bundle adds stage24.24.1-particle-runtime.txt, stage24.24.1-particle-emitter-limit-contract.txt, and stage24.24.1-hud-alpha.txt.
+
+v0.26.67 / Stage 24.24.0 — original particle-system contract audit
+- Keeps particles.addParticles headless; no visual/simulation behavior changed.
+- Dumps all untouched particleTable.particles definitions and particle-producing Lua bytecode owners.
+- Adds original ARMv7 Particles/ParticleSystem symbol, disassembly, and particle-string audit.
+- Diagnostic bundle now includes stage24.24.0-particle-contract.txt and stage24.24.0-particle-native-contract.txt.
+
+v0.26.66 / Stage 24.23.5 — original pause/resume animation lifecycle
+- Removed the historical Stage 8 `setAnimationState -> l_noop` headless stub after v0.26.65 proved untouched hidePauseMenu depends on the original ingamePausePageScroll EXITING animation.
+- Preserves/verifies original Lua setAnimationState + updateAnimations; no synthetic resume/game-mode/physics transition.
+- Audio volume backend remains deferred; this stage targets resume lifecycle only.
+
+v0.26.65 / Stage24.23.4
+- Pause lifecycle/audio contract audit (diagnostic only).
+- Runtime repro from v0.26.64: original BUTTON_RESUME selects hidePauseMenu but returns to updateMenu next frame; original BUTTON_RESTART successfully reaches updateLoading/reloads Level1; BUTTON_SFX reaches drawMenu pc=411 and exposes missing res.getTrackVolume.
+- Dumps untouched pause/menu Lua owners and original ARMv7 LuaResources track/master-volume methods before implementing any audio or resume fix.
+
+﻿v0.26.64 / Stage24.23.3
+- Live pause validation proved the pause input transition itself is correct: a tap inside the original 73x71 MENU_BUTTON immediately entered currentGameMode=showPauseMenu.
+- The apparent freeze was a hard render abort, not a stuck pause state: untouched drawMenu switched to FONT_MENU and res.drawString failed because only FONT_BASIC/FONT_BIG_NUMBERS/FONT_SCORE texture transports were packaged.
+- Adds FONT_MENU.dat to the exact DAT-driven bitmap-font texture transport set, so FONT_MENU_N900.pvr is recovered/staged from the original 864x480 assets rather than guessed.
+- No pause geometry, menu input, animation timing, button action, gameplay, physics, score, camera, or font metrics are changed.
+- Existing Stage24.23.2 telemetry remains the acceptance test: first visible pause drawMenu frame must PASS with the original 73x71 hitbox.
+
+v0.26.63 / Stage24.23.2
+- Runtime validation of Stage24.23.1 exposed a legacy headless-bootstrap override that still replaced the original initializeMenu/createMenuPages pauseButtonW/pauseButtonH values with unreachable -1e9 extents after they had correctly resolved to 73x71.
+- Removes only that obsolete override. The original createMenuPages-owned MENU_BUTTON bounds now survive into untouched updateGame, which remains the sole owner of the LBUTTON hit-test and goToMenu() transition.
+- Extends the already-generic untouched drawMenu renderer to the Lua-selected pause page, alongside levelComplete/levelFailed; no hand-authored pause geometry, hitbox, transition, or button actions are added.
+- Adds stage24.23.2-pause-menu.txt telemetry proving the surviving hitbox, updateMenu/pause transition, and first visible original drawMenu frame.
+
+v0.26.62 / Stage24.23.1
+- Stage24.23.0 closes the untouched gameplay HUD contract: drawGame renders INGAME_BIRDS_1/HUD_ARROW_UP for an above-screen camera target, then later BUTTONS_SHEET_1/MENU_BUTTON at (0,0) on the ordinary Android identity-render-state branch.
+- Restores HUD_ARROW_UP in its exact draw order after the front slingshot and before the fixed score HUD, using the original useLevelLimits/cameraTargetObject gate, worldScale-or-tempWorldScale transform, target sprite pivot, physicsToWorld, screen.top and floor() coordinate rules.
+- Restores MENU_BUTTON at (0,0) with original SPRT pivot semantics. No synthetic touch region is added: untouched updateGame pc=0471..0495 owns LBUTTON < pauseButtonW/pauseButtonH and calls goToMenu(); original initializeMenu produced a 73x71 Android hitbox in the audited run.
+- Applies the now-proven drawGame pc=0269..0311 block gate consistently: fixed score, floating scores and MENU_BUTTON are skipped in updateEditor and on the six recovered terminal updateMenu pages.
+- Extends the Stage24.23.0 sprite matcher to include the exact MENU_BUTTON spelling and adds stage24.23.1-gameplay-hud.txt runtime telemetry.
+- Does not synthesize pause/menu state, button input, HUD scaling, sprite geometry, camera behavior, score behavior, physics, or terminal-menu behavior.
+
+v0.26.61 / Stage24.23.0
+- Starts a diagnostic-only audit of the remaining fixed gameplay HUD after score/floating-score and level-ending systems were closed.
+- Dumps the complete untouched drawGame Proto plus targeted pause/HUD/menu-button owner windows from updateGame/initializeMenu/createMenuPages/prepareMenuPage.
+- Inventories exact HUD/pause/menu-like sprite metadata and records original initializeMenu pauseButtonW/pauseButtonH/pauseBG dimensions/page shape at runtime.
+- Does not draw or enable a guessed pause button; no HUD pixels, hitbox, pause state, menu state, input, physics, score, or camera behavior changes.
+- Adds stage24.23.0-gameplay-hud-remainder-contract.txt to the diagnostic bundle.
+
+v0.26.60 / Stage24.22.9
+- Runtime validation of Stage24.22.8 closes the failure deadlock: after five spent birds on Level57, the original levelFailedTimer advances to ~1.5 s and currentGameMode/currentMenuPage transition to updateMenu/levelFailed without any synthetic fail condition.
+- The same Rovio Box2D tolerance restoration also keeps the previously unstable Level57 pig/structure settled in the observed run, linking both symptoms to the non-stock linear tolerance contract.
+- Extends the existing generic visible terminal-menu gate from levelComplete-only to both levelComplete and levelFailed.
+- Rendering remains the untouched original drawMenu closure through the already-proven GLES1 sprite/font bridge; no hand-authored failure-screen geometry or text is introduced.
+- Adds stage24.22.9-terminal-menu.txt runtime telemetry.
+
+﻿v0.26.59 / Stage24.22.8
+- Stage24.22.7 proves the original ARMv7 position solver uses b2_linearSlop=0.05f: the exact separation path adds +0.05, clamps at -0.2, and returns success at -0.075 (= -1.5*0.05).
+- Restores the other already-proven non-stock Rovio sleep constants: b2_timeToSleep=0.25f and b2_linearSleepTolerance=0.1f.
+- Leaves b2_velocityThreshold=1.0f, b2_maxLinearCorrection=0.2f, b2_contactBaumgarte=0.2f and angular sleep tolerance unchanged because ARMv7 matches stock there.
+- The pinned Box2D 2.1.2 tree is audited pristine first, then patched coherently before compilation; b2_polygonRadius now naturally resolves to 0.1f from 2*b2_linearSlop.
+- Does not change Lua speed<0.05 bird removal, levelFailed logic, restitution/material values, scores, or rendering.
+- Adds build/runtime telemetry for the compiled Rovio tolerance contract.
+
+v0.26.58 / Stage24.22.7
+- Stage24.22.6 material-mix question is closed using the already-captured Stage24.22.4 ARMv7 b2ContactSolver constructor: friction is sqrt(fA*fB) and restitution is max(rA,rB), exactly stock Box2D 2.1.2.
+- Identifies a stronger consistency clue: original polygon m_radius is 0.1f while the current bridge forces only that radius on top of a stock solver compiled with b2_linearSlop=0.005f.
+- Adds a diagnostic-only ARMv7 linear-slop / position-correction audit around SolvePositionConstraints and b2Island::Solve to resolve b2_linearSlop, maxLinearCorrection, contactBaumgarte and related settings before any physics patch.
+- No physics or gameplay mutation is applied.
+- Adds stage24.22.7-linear-slop-position-contract.txt to the diagnostic bundle.
+
+v0.26.57 / Stage24.22.6
+- Stage24.22.5 proves the original createCircle/createBox physics construction matches the current bridge: direct friction/restitution/density, angularDamping=1.0, inertiaScale=1.0, stock body flags, and direct geometry.
+- Records the one construction mismatch: original fixture userData is RenderObjectData*, while the bridge currently uses nullptr; this is non-physical and cannot explain the solver rebound.
+- Adds a diagnostic-only ARMv7 b2Contact material-mixing audit to resolve whether Rovio kept stock Box2D 2.1.2 sqrt(f1*f2) friction and max(r1,r2) restitution.
+- No physics or gameplay mutation is applied.
+- Adds stage24.22.6-contact-material-mix-contract.txt to the diagnostic bundle.
+
+v0.26.56 / Stage24.22.5
+- Proved from Stage24.22.4 ARMv7 dataflow that the restitution velocity threshold is exactly stock 1.0f: the constructor materializes 0xbf800000 (-1.0f) immediately before __aeabi_fcmplt(vRel, threshold).
+- Closes the b2_velocityThreshold hypothesis; no threshold patch is applied.
+- Adds a diagnostic-only ARMv7 body/fixture construction audit following createCircle/createBox candidates through b2World::CreateBody and b2Body::CreateFixture.
+- Explicitly audits direct restitution/friction/density pass-through plus currently reconstructed body settings such as angularDamping=1.0 before any further physics mutation.
+- Adds stage24.22.5-body-fixture-contract.txt to the diagnostic bundle.
+
+v0.26.55 / Stage24.22.4
+- Diagnostic-only ARMv7 Box2D contact-bias/restitution-threshold audit.
+- Stage24.22.3 proved Rovio uses non-stock island sleep constants: linear sleep tolerance 0.1 and time-to-sleep 0.25 s.
+- Dumps b2ContactSolver constructor/InitVelocityConstraints with decoded float literal pools to resolve the exact compiled b2_velocityThreshold before any physics patch.
+- No restitution, sleep, lifecycle, fail-state, score, or rendering behavior changed.
+
+v0.26.51 / Stage24.22.0
+- Diagnostic-only Level57 failure-state contract audit after a five-bird failed run did not advance levelFailedTimer.
+- Dumps untouched checkLevelFailed/initLevelFailed/updateGame/updateLevelEnding/checkLevelGoalsDestroyed bytecode before native binding replacement.
+- Logs live birdsCounter/birdsShot/birdReady/birdFired/motion/goals/failure timers when no current or flying bird remains.
+- Does not synthesize failure state or render the levelFailed menu.
+
+v0.26.50 / Stage24.21.0
+- Adds original floating score rendering from untouched Lua floatingScores.
+- Uses FONT_SCORE only for this path, preserving the recovered drawGame font switch.
+- Uses original physicsToWorldTransform, per-entry xs, BOTTOM/HCENTER anchors, and MENU_ELEMENTS_1 sprite scores.
+- Leaves updateFloatingScores as the sole owner of lifetime/grow/hold/shrink behavior.
+- Keeps Stage24.20.1 WVGA 854x480 debug display harness as the default test presentation; native remains selectable.
+
+v0.26.49 / Stage24.20.1
+- Added testing-only WVGA 854x480 logical display harness (default build mode).
+- Uniform centered viewport inside the physical ANativeWindow with black test matte.
+- Lua screenWidth/screenHeight, camera, gameplay/menu projection and touch all use 854x480.
+- Preserved recovered native Context behavior behind -DisplayMode native.
+- No gameplay, physics, score, asset or HUD contract changed.
+
+﻿v0.26.48 / Stage 24.20.0
+- Implements the original fixed gameplay score HUD recovered from untouched drawGame bytecode.
+- Uses fontBasic/FONT_BASIC, localized MI_SCORE/MI_HIGH_SCORE, RIGHT/TOP anchors, screenWidth-3, oldScoreLen, and the original optional ad Y-offset contract.
+- Keeps FONT_SCORE reserved for the still-unimplemented floatingScores path, exactly as the original drawGame order shows.
+- No score calculation, threshold, physics, slingshot, camera, or result-menu behavior changed.
+
+v0.26.44 / Stage 24.19.0
+- Diagnostic-only original gameplay score HUD contract audit after the Stage 24.18.2 slingshot PASS.
+- Recursively finds untouched Lua Protos owning score-related constants and dumps exact reference windows before native binding replacement.
+- Inventories untouched 864x480 score/font asset metadata.
+- No HUD pixels, coordinates, font choices, anchors or scaling rules are guessed in this stage.
+
+v0.26.43 / Stage 24.18.2
+- First visible slingshot reconstruction from untouched 1.4.2 drawGame bytecode.
+- Replays exact BACK/HOLDER/FRONT sprite ownership, levelStartPosition/rubberBandPos placement, selectedBird holder branch, rubberBandAngle rotation, and recovered draw ordering around drawGameNative/foreground.
+- Rubber width follows the recovered reciprocal rule clamp(50/rubberBandLength, 10, 25); color is the exact Lua drawLine2D RGBA 48,23,8,255.
+- No screenshot-derived coordinates or visual tuning constants.
+
+v0.26.42 / Stage 24.18.1
+- Diagnostic-only slingshot Lua owner audit.
+- Recursively identifies untouched 1.4.2 Protos owning exact sling/rubber constants and dumps only target-reference bytecode windows.
+- Reports exact INGAME_BIRDS_1 rect/pivot metadata for SLING_HOLDER, SLING_SHOT_01_FRONT and SLING_SHOT_01_BACK.
+- No rendering behavior changed.
+
+v0.26.41 / Stage 24.18.0
+- Diagnostic-only original slingshot/resource render contract audit after the Stage 24.17.0 Context presentation PASS.
+- Dumps ARMv7 GameLua::drawGame call sequence and exact local 864x480 sling/rubber asset metadata owners before any visual implementation.
+- No gameplay/render behavior change.
+
+v0.26.40 / Stage 24.17.0
+- Implements the recovered original Android Context presentation contract after the 24.16.x audits.
+- Lua screenWidth/screenHeight now mirror the real EGL/ANativeWindow Context dimensions instead of a synthetic 480x320 gameplay canvas.
+- Gameplay/menu viewport fills the Surface; removes the Stage24 pillarbox black matte.
+- Projection, culling, scene bounds, touch mapping and framebuffer readback use the same Context dimensions.
+- Stages original 864x480 font assets because untouched Android 1.4.2 selectors choose that quality bucket at >=480 screen height.
+- Adds first-frame Context/Lua dimension invariant diagnostics.
+- User-reported possible gameplay bug intentionally deferred until presentation validation.
+
+v0.26.39 / Stage 24.16.4
+- Diagnostic-only JNI dimension provenance audit.
+- Dumps original ARMv7 MyRenderer_nativeInit and traces the exact Java/ARM arguments forwarded as EGL_Context width/height.
+- No presentation/runtime behavior changes.
+
+angry-arm64-bootstrap-v0.1 changes relative to supplied KA3D 1.4:
+- include/lang/pp.h: PLATFORM_ANDROID / PLATFORM_POSIX
+- include/lang/GlobalStorage.h + source/lang/GlobalStorage.cpp: static singleton on new platforms
+- source/lang/System.cpp: monotonic millisecond clock on new platforms
+- include/config.h: generic modern config
+- include/xmath.h: generic math shim
+- source/lua/lua-5.0.2/src/llimits.h: pointer hash via uintptr_t for 64-bit builds
+- added CMakeLists.txt, smoke.cpp and PowerShell build/run helpers
+- excluded legacy profiler/tests from bootstrap build
+
+[v0.1.2]
+- Fix Debug.cpp printf(msg) -> printf("%s", msg) for Android Clang format-security.
+- Replace Android helper with Ninja/toolchain version, cleaning stale Visual Studio cache.
+
+[v0.23.7]
+- Promote ARMv7-recovered polygon shape radius 0.1f to normal createBox() path.
+- Add Stage 22.7 frame-120 idle soak + complete Level1 regression gate.
+- Assert zero pig damage mutations before first input while preserving full gameplay lifecycle.
+- Add fidelity roadmap through sprite/PVR, live GLES, JNI/input, audio, UI, persistence and APK differential validation.
+
+[v0.24.0]
+- Stage 23.0 starts original renderer reconstruction with a no-guess SPRT manifest audit.
+- Preserve original SPRT texture-name lists instead of discarding them.
+- Map every materialized Level1 sprite to source DAT sheet, texture, atlas rect and pivot.
+- Emit renderer-facing stub inventory and fail on missing/ambiguous texture mappings.
+- Retain the full Stage 22.7 Level1 run as a gameplay regression after manifest generation.
+
+v0.24.1 / Stage 23.1
+- Added byte-preserving PVR/PVRTC container audit for the two Level1 texture atlases.
+- Audit runs as native arm64-v8a and understands legacy PVR v2 plus PVR v3.
+- PVRTC payload/mipmap sizes are mathematically cross-checked against file bytes.
+- Original zip and raw-PVR SHA-256 identities are recorded; no transcoding is performed.
+
+
+v0.24.2 / Stage 23.1 correction
+- Corrected legacy PVR v2 format enum: 0x10 is GL_RGBA_4444; PVRTC is 0x18/0x19 in the OpenGL legacy range.
+- Added exact raw-payload validation for uncompressed legacy formats.
+- Level1 blocks/birds atlases are expected to prove RGBA4444 with no mipmap or vertical-flip flags.
+- Renderer contract changes from glCompressedTexImage2D to byte-preserving GL_UNSIGNED_SHORT_4_4_4_4 glTexImage2D for these atlases.
+
+- Stage 23.2: first original-sprite offline replay; exact SPRT rect/pivot and per-frame sprite names over real ARM64 gameplay transforms, with atlas-Y audit toggle.
+
+v0.24.3 / Stage 23.2
+- First original-sprite offline replay over the full recovered Level1 ARM64 run.
+- Decode original PVR v2 RGBA4444 atlas payloads to debug-only RGBA PNG views for browser playback.
+- Capture the current Lua sprite name per body per frame so damage sprite transitions are visible.
+- Apply exact SPRT source rects and pivots with 20 source pixels per physics world unit.
+- Keep collision geometry as an optional registration overlay and expose atlas-Y orientation as an explicit toggle.
+- Add static llvm-readelf audit of original ARMv7 libangrybirds.so GLES/EGL dependencies/imports before choosing a live renderer API.
+
+v0.24.8 / Stage 23.6A
+- reconstruct ARMv7 GameLua RenderObjectData 2-slot x/y/angle history;
+- publish accumulator/(1/30) interpolated transforms to Lua and GLES;
+- mirror awake-body and >2-fixed-step catch-up history gates;
+- mirror setPosition/setRotation forcing both history slots + published transform;
+- add paired GPU snapshots (70/71, 220/221) and positive interpolation runtime gate;
+- camera and draw order intentionally remain non-final audit boundaries.
+
+v0.26.0 / Stage 24.0
+- closes Stage 23.6C on-device (KA3D Hashtable + ARMv7 multipass draw order)
+- adds NativeActivity shared-library target libangryarm64.so
+- replaces EGL pbuffer output with real ANativeWindow / EGL_WINDOW_BIT surface
+- renders every Level1 frame live through GLES1 and eglSwapBuffers
+- maps Android MotionEvent DOWN/MOVE/UP into original Lua cursor/LBUTTON input
+- local Gradle-free APK build/sign/install script; original assets sourced only
+  from the user's extracted Angry Birds 1.4.2 tree during the local build
+
+v0.26.36 / Stage 24.16.1
+- Keep v0.26.35 presentation visually unchanged while closing the native Android resolution ownership boundary.
+- Add exact ARMv7 bodies + direct caller contexts for EGL_Context::setViewport, setScreenTransform, AndroidOSInterface::setResolution, App::resolutionChanged, transformPointToScreen and glViewport.
+- Fix the Stage24.16.0 audit gap where EGL_Context methods appeared in the symbol inventory but were skipped by the exact-body regex.
+- Add a side-effect-restored original Lua selector matrix across representative screen sizes; no probe dimensions are promoted into runtime.
+
+v0.26.80 / Stage 24.26.1
+- Keep trajectory/puff behavior headless after the Stage 24.26.0 producer/storage recovery.
+- Add full ARMv7 drawGame + recovered-field consumer audit for the two 3-slot trajectory banks.
+- Inventory exact TRAIL_WHITE/BLACK/FLOWER resources, ELF addresses/pointers, and neighboring original DAT metadata.
+- Decode untouched updateGame puff callsites with RK comparison constants so birdSpecialty branches are no longer opaque.
+- Add optional puff runtime context (specialty/name/definition/sprite/callsite) without storing or drawing trail state.
+
+[v0.26.86 / Stage 24.28.3]
+- Restored full updateMenu frame ownership: reconstructed gameplay world/HUD/pause no longer render beneath original menus.
+- Re-exposed ARMv7-recovered drawBackgroundNative/drawForegroundNative at untouched drawMenu call sites.
+- Added static/runtime menu render ownership and remaining-resource provenance audits.
+- Startup splashes, 1-1 story/cutscene and persistence remain intentionally unchanged.
+
+[v0.26.87 / Stage 24.28.4]
+- Split updateMenu renderer ownership into GAMEPLAY_OVERLAY vs FULL_FRAME_MENU.
+- Pause/levelComplete/levelFailed/gameFinished* now keep the reconstructed final gameplay scene underneath untouched drawMenu shade/UI instead of clearing to black.
+- Root menus retain Stage24.28.3 clean menu-theme ownership with no gameplay world/HUD leak.
+- Added diagnostic no-launch openURL binding after v0.26.86 trailer callback proved the global was missing and Lua-fatal.
+- Added original Lua openURL-producer / overlay-gate dump plus ARMv7/script platform-boundary static audit.
+- Kept Stage24.27.0 bird-rest telemetry active; no physics fix attempted.
+
+[v0.26.88 / Stage 24.28.5]
+- Restored untouched updateMenu -> setBGColor(currentMenuPage.bgColor) ownership for full-frame menu base clears.
+- Level/Episode selection translucent background art now composes over the original page RGB instead of forced black.
+- Corrected the platform boundary namespace from global openURL to the proven `_G.res.openURL` lookup used by original callbacks.
+- `res.openURL` remains diagnostic/no-launch; trailer/social/store requests are logged without killing Lua or launching external apps.
+- Added Stage24.28.5 Lua/runtime/static contract reports for background-color and platform-boundary closure.
+
+[v0.26.89 / Stage 24.29.0]
+- Restored user-visible vanilla startup branding before Main Menu while retaining the stable Level1 scaffold internally and fully hidden/frozen during boot.
+- Added original 2 s white Rovio -> 1 s black Angry Birds core splash timing and recovered LBUTTON skip behavior.
+- Added fail-closed SPLASH_ROVIO/SPLASH_ANGRY_BIRDS ownership audit and edition-safe Clickgamer policy: show only when a concrete retained asset owner exists; never invent missing branding art.
+- Startup handoff now returns to untouched `mainMenu` / `updateMenu`, allowing normal Play -> Episode -> Level Selection -> level navigation.
+- Added Stage24.29.0 static/runtime diagnostics; 1-1 story/cutscene, persistence and external platform services remain deferred.
+
+[v0.26.90 / Stage 24.29.1]
+- Closed the Stage24.29.0 frame-1 black-screen regression: original splash atlases are legacy PVR v2 GL_RGB_565 (type 0x13), not RGBA4444.
+- Extended the exact PVR v2 runtime parser/uploader with the proven RGB565 masks and byte-count contract; original payload remains byte-identical and uploads through GL_RGB/GL_UNSIGNED_SHORT_5_6_5.
+- Added fail-closed build/runtime diagnostics for RGB565 startup assets. The same support also closes the long-standing BACKGROUNDS_GE_1/BACKGROUNDS_MAIN_1 RGB565 warnings when those textures are present.
+
+[v0.26.91 / Stage 24.30.0]
+- Adds diagnostic-only `_G.res.createSpriteSheet` and `releaseCutScenes` probes after the vanilla boot/menu path reached the original first-entry 1-1 story loader.
+- Dumps targeted untouched Lua cutscene/story bytecode and the `theme1Start` / `introAnimation` tables.
+- Adds ARMv7 + original corpus cutscene metadata/symbol audit.
+- Does not load/render cutscene sprite sheets or fabricate story behavior.
+
+v0.26.96 / Stage24.31.0
+- Adds read-only original save/progress persistence contract audit.
+- Replaces saveLuaFile/checkForLuaFile/createDirectory/saveLevel blanket stubs with no-write argument/context probes.
+- Snapshots the Lua global table named by saveLuaFile argument 2 at each real save request.
+- Adds untouched Lua Proto inventory for settings/highscores/unlock/save producers.
+- Adds ARMv7 save/load/check/create/saveLevel static symbol/disassembly audit.
+- No profile files are written in this revision.
+
+
+v0.26.96a / Stage24.31.0 build hotfix
+- Fix compile-only symbol mix-up in the older Stage24.30.0 Lua bytecode dumper.
+- No persistence/runtime behavior changed.
+
+v0.26.97 / Stage 24.31.1
+- Real app-private settings.lua + highscores.lua persistence based on the 24.31.0 ARMv7/runtime contract.
+- Loads both profile roots before menu/audio initialization and logs PASS_FROM_DISK on restart.
+- Atomic tmp + fsync + rename commit; zero-return saveLuaFile contract preserved.
+- Added restart-stage24-live.ps1 and profile file/SHA collection to diagnostics.
+- Tutorial restoration and menu micro-fidelity remain deferred.
+
+v0.26.97a / Stage 24.31.1 automated persistence test helper
+- Added test-stage24-persistence-auto.ps1.
+- No gameplay/persistence runtime behavior changes versus v0.26.97.
+- One-command driver watches real WRITE PASS markers, captures RUN A, force-stop/starts without reinstall or clear-data, waits for settings/highscores PASS_FROM_DISK, captures RUN B, and emits one final evidence ZIP.
+
+v0.26.98 / Stage 24.31.2
+- removes the ancient v0.9.3 headless `birdTutorialPopups = {}` bypass;
+- restores the original 1-1 first-run Red tutorial queue/physics/input lifecycle;
+- implements the missing KA3D `res.drawCompoSprite` boundary from retained COMP child offsets/pivots;
+- replays the proven drawGame tutorial overlay tail (shade/backgroundBox/composite/TUTORIAL_OK) over live gameplay;
+- preserves Stage 24.31.1 real settings/highscores persistence so the tutorial seen-state survives restart after save;
+- adds a narrow settings-only reset helper for first-run testing.
+
+v0.26.106 / Stage 24.31.4f
+- Closed the UI seam root cause from the Stage24.31.4e 1:1 raster A/B proof.
+- Legacy 854x480 game rendering now stays 1:1 in framebuffer pixels.
+- Added an outer presentation-only texture: copy the completed legacy frame, then scale that single composited image to the modern Surface.
+- Input maps from the visible aspect-fit presentation viewport back to 854x480 logical coordinates.
+- Original Angry Birds atlas UVs remain edge-to-edge; no legacy half-texel workaround reintroduced.
+- Presentation texture alone uses an outer-edge half-texel inset to avoid sampling unused POT padding.
+- Settings gear and Golden Egg aura remain deferred to the next UI micro-fidelity pass.
+
+
+v0.26.107 / Stage 24.31.5
+- Begins audit-first menu micro-fidelity closure for Main Menu settings gear and About/Credits Golden Egg aura.
+- Adds read-only ARMv7 RenderState2D producer/consumer audit through GameLua, EGL_Context, EGL_RenderBatcher and default shader boundaries.
+- Retains existing runtime transform telemetry; no sprite-name pivot/visibility workaround is introduced.
+- Adds passive 1-1 score-fidelity observation: original max-score message, star thresholds, scoreTable bucket deltas, completion gate, post-complete bonus timing and final RESULT_STARS presentation.
+- New score telemetry is OBSERVE_ONLY and does not write score, scoreTable, starTable, bonuses or highscores.
+- Stage 24.31.4f 854x480 1:1 internal raster + outer modern presentation remains unchanged.
+
+v0.26.108 / Stage 24.31.5b
+- Reconstructs the recovered ARMv7 EGL_Image per-draw RenderState2D consumer instead of applying a global GL model matrix to already-world-space vertices.
+- setRenderState now stores state with identity GL_MODELVIEW; sprites, bitmap-font glyphs and drawRect transform image-local corners around the recovered pivot/translation/scale/angle semantics.
+- No BUTTON_OPTIONS or GOLDEN_EGG_STAR_EFFECT sprite-name fix is introduced.
+- Adds transformed-corner/pivotWorld telemetry and a static ARMv7/source reconstruction preflight.
+- Keeps the Stage24.31.5 1-1 score observer passive and unchanged; no scoring or physics values are modified.
+- Stage24.31.4f 854x480 1:1 legacy raster + outer modern presentation remains unchanged.
+
+
+v0.26.109 / Stage 24.32.0
+- Closes Stage24.31.5b settings-gear visual validation and begins Pack 1 progression expansion from the already-working 1-2.
+- Uses the untouched runtime levelSelectionPagesBasic table as authority: 1-1=Level1, 1-2=Level57, 1-3=Level53.
+- Adds only the user's original Level53.lua transport/materialization; no Level-number remap or forced next-level branch.
+- Adds read-only progression telemetry for the first three mapping entries, getNextLevel('Level57'), and live logical level/index transitions.
+- Retains real settings/highscore persistence and the passive score-fidelity observer unchanged.
+
+
+v0.26.110 / Stage 24.32.1
+- transports original Pack1 levels through human 1-10 using the recovered original mapping
+- publishes actual Android pointer count + second pointer coordinates; secondary pointers no longer disappear
+- adds an evidence-derived two-pointer span -> Lua zoomLevel compatibility bridge; original doItAllCamera remains sole camera/scale owner
+- leaves Blue CLUSTER_BOMB implementation untouched in Lua; adds read-only specialty runtime telemetry for the 1-10 test
+- adds focused progression/multitouch/specialty contract + diagnostic pull/test workflow
+
+v0.26.111 / Stage 24.32.1a preflight hotfix
+- Fixes the inherited Stage 24.32.0 static contract so the widened 1-10 required-level list is accepted semantically instead of matching the old exact 1-3 array text.
+- Accepts the expanded 10-entry progression-map verifier and looped stock getNextLevel probe while retaining the original 1-1/1-2/1-3 proof and anti-hack gates.
+- No gameplay, input, camera, physics, scoring, save, progression or Blue specialty runtime code changed from v0.26.110.
+
+
+v0.26.112 / Stage 24.33.0
+- Fixes the generic createCircle Lua-object reconstruction exposed by the first live Blue specialty run.
+- Materializes density, friction, restitution, controllable and z_order into objects.world[name], matching the arguments already used to create the Box2D body/render metadata.
+- Leaves untouched Lua updateGame/CLUSTER_BOMB as the sole Blue split owner; no SmallBlueBird native special-case or synthesized child birds.
+- Extends specialty telemetry to show the flying bird's createCircle template fields before dispatch.
+- The prior 1-10 run already validated two-pointer pinch through zoomLevel/doItAllCamera and reached CLUSTER_BOMB; it failed only at createCircle argument #6 because flyingBird.density was nil.
+
+
+
+v0.26.114 / Stage 24.34.1
+- Closes the first 21-level Pack1 block using the untouched recovered levelOrder.pack1 mapping.
+- Adds original level transport only: 1-17=Level17, 1-18=Level14, 1-19=Level16, 1-20=Level23, 1-21=Level44.
+- Expands the read-only progression map observer through levelIndex 21.
+- Keeps stock getNextLevel/unlock/highscore/save, physics, score, camera, Blue CLUSTER_BOMB and Yellow BOOST behavior unchanged.
+- Adds test-stage24-pack1-chapter1-closure.ps1 and a dedicated runtime report.
+
+v0.26.113 / Stage 24.34.0
+- Closes runtime validation of generic createCircle metadata + untouched Blue CLUSTER_BOMB children/collision/score behavior.
+- Transports original Pack1 levels 1-11..1-16 using the recovered levelOrder.pack1 mapping: Level9, Level13, Level10, Level39, Level12, Level15.
+- Leaves stock getNextLevel/unlock/highscore/save ownership unchanged; no forced transition or unlock path is introduced.
+- Audits the untouched Yellow BOOST branch rather than implementing it: generic specialty state now reports mass/xVel/yVel/sprite and applyImpulse logs the real BOOST impulse after Box2D consumption.
+- No SmallYellowBird/BIRD_YELLOW_SPECIAL native special-case and no synthetic boost force is added.
+
+v0.26.115 / Stage 24.35.0
+- Records runtime closure of the first 21-level Pack1 flow: 1-21 completes through original theme1Complete, sets settings.theme1Completed=true, and returns to levelSelectionPagesBasic without a forced level 22.
+- Transports untouched Pack2 levels through human 2-5 using recovered original mapping: Level52, Level34, Level42, Level24, Level88.
+- Adds original INGAME_PARALLAX_2 DAT/PVR transport for theme-2 scene layers while retaining the already-resident sky/ground scene families.
+- Leaves stock level selection, getNextLevel, unlock/highscore/save, physics, score, camera, Blue CLUSTER_BOMB and Yellow BOOST unchanged.
+- Uses 2-5 as an audit-only live test of untouched Lua BOMB -> makeExplosion/specialSound/removeBird; no native Bomb implementation or sprite special-case is added.
+- Adds focused Pack2/Bomb static/runtime diagnostics and includes the recent 24.32.1/24.34.x reports in the diagnostic ZIP.
+
+
+v0.26.116 / Stage 24.35.1
+- Fixes the first correct Level52/theme2 load crash: INGAME_PARALLAX_2.pvr was staged/uploaded, but INGAME_PARALLAX_2.dat was omitted from two historical native metadata bootstrap lists.
+- Adds the original DAT to Android asset extraction and SpriteDB scene-metadata loading; no theme2 layer values, render math, level data, physics, progression or Bomb behavior is changed.
+- Adds a focused preflight that requires scene texture transport, DAT packaging, native extraction, and runtime metadata registration to agree.
+
+v0.26.117 / Stage 24.35.2
+- Runtime diagnosis closes v0.26.116 Level52/2-1: Level52 loads, renders theme2, completes and persists normally; the next crash occurs only on Level34/2-2.
+- Level34 exposes static terrain objects whose untouched setTexture metadata names INGAME_THEME_GROUND_2; the historical Stage24.14 MaskedImage consumer was still hardcoded to INGAME_THEME_GROUND_1.
+- Transports/extracts/uploads the untouched original INGAME_THEME_GROUND_2.pvr and selects the MaskedImage fill atlas from each batch's original RenderObjectMeta.textureName.
+- Fill UV normalization now uses the selected fill atlas dimensions; mask sprites remain original GROUND_BLOCK_* from INGAME_BLOCKS_1.
+- No Level34 special case, level-data edit, physics/score/progression change, or Bomb implementation is added.
+- Adds Stage24.35.2 static/runtime diagnostics and preflight coverage for transport, extraction and producer-driven fill selection.
+
+
+v0.26.118 / Stage 24.36.0
+- Runtime-validates Pack2 2-6 through 2-14 using the untouched recovered mapping.
+- Untouched Lua White DROPPABLE_EGG creates original egg bodies through generic createCircle, plays special_egg, participates in physics/destruction/score, and Level26 completes normally.
+- No White-specific native gameplay behavior is added.
+
+v0.26.119 / Stage 24.36.1
+- Pure Pack2 progression expansion through the end of page 2: 2-15=Level66, 2-16=Level85, 2-17=Level27, 2-18=Level32, 2-19=Level72, 2-20=Level90, 2-21=Level96.
+- Expands read-only mapping and stock getNextLevel probes through Pack2 pageLevelIndex 21.
+- Leaves stock unlock/highscore/save/physics/score/specialties and theme2Complete handling untouched.
+- Adds focused 2-15..2-21 closure test and runtime report.
+
+
+v0.26.120 / Stage 24.37.0
+- Runtime-validates the v0.26.119 Pack2 2-15..2-21 closure and stock theme2Complete/settings.theme2Completed=true path; no gameplay/progression blocker remains in that block.
+- Re-audits original ARMv7 EGL_Image::draw after screenshots + live trace exposed only one visible half of LS_BACKGROUND.
+- Corrects generic RenderState2D ordering: local pivot rotation + draw-origin/translation first, then scaleX/scaleY on the resulting screen coordinate.
+- Restores the original negative-scale composition mathematically: x=-854,width=427,scaleX=-1 maps to visible x=427..854 while the normal half covers x=0..427.
+- No LS_BACKGROUND/page/level-specific geometry branch; adds bounded read-only Stage24.37.0 transform telemetry and a focused visual regression test.
+- Gameplay, physics, camera, score, save, audio, theme2 terrain/scene support and all restored bird specialties remain unchanged.
+
+v0.26.121 / Stage 24.37.0a
+- Preflight-only compatibility hotfix; runtime/render/gameplay code is byte-identical to v0.26.120.
+- Fixes inherited Stage24.31.5b false FAIL caused by its fixed source-slice window no longer reaching legacy transformedTL/transformedBR telemetry after the Stage24.37.0 observer was inserted earlier in stage24132DrawSprite().
+- The guard now accepts either Stage24.37.0 semantic bounds/ARMV7_POST_AFFINE_SCREEN_SCALE telemetry or the retained legacy transformed-corner telemetry.
+- Keeps all ARMv7 affine evidence, ordering guards, anti-sprite-specific checks, presentation closure and passive-score guards intact.
+
+
+
+v0.26.122 / Stage 24.38.0
+- Runtime baseline closes Poached Eggs through 2-21 plus the corrected full-width negative-scale menu background.
+- Starts Pack3/page3 using untouched mapping: 3-1=Level43, 3-2=Level77, 3-3=Level28, 3-4=Level29, 3-5=Level87.
+- Uses the exact existing Stage24.15.0 asset inventory to add INGAME_PARALLAX_3 DAT/PVR and INGAME_THEME_GROUND_3 PVR; theme3 sky/foreground remain the proven shared INGAME_SKIES_1/INGAME_GROUNDS_1 families.
+- Extends the already-generic MaskedImage fill selection to original textureName=INGAME_THEME_GROUND_3 and loads parallax3 through the same SpriteDB/scene-atlas paths as parallax1/2.
+- Adds read-only Pack3 map/getNextLevel/theme3 diagnostics and a focused 3-1..3-5 test workflow.
+- No level-specific geometry/gameplay branch, forced unlock/theme3 completion, physics/score/camera/audio/save change, or bird-specialty rewrite.
+
+
+v0.26.123 / Stage 24.38.1
+- Runtime baseline v0.26.122 closed Pack3/theme3 3-1..3-5; Level43 was loaded 39 times before completion with no runtime failure.
+- Stages untouched Pack3 3-6..3-21: Level18,Level91,Level49,Level45,Level75,Level51,Level30,Level79,Level40,Level59,Level58,Level95,Level82,Level22,Level89,Level81.
+- Adds read-only full Pack3 map + Next/theme3Complete closure telemetry; no gameplay/progression override.
+
+
+v0.26.124 / Stage 24.38.2
+- Full v0.26.123 Pack3 run proves 3-6..3-21 completion and original Level81 gameFinished -> gameComplete / settings.gameCompleted=true closure.
+- Captures one real Level22 terminal-failure Lua error: levelFailed was boolean when untouched updateLevelEnding expected the original menu-page table.
+- Root cause is Stage24.29.0 boot handoff assigning levelFailed=false; original failure state is levelFailedTimer, while levelFailed is initializeMenu's 24-item page table.
+- Removes only that corrupting handoff assignment and adds read-only post-boot ownership telemetry. No Level22 special case, forced fail page/timer, gameplay, physics, score, save, renderer, progression or asset change.
+- Adds Stage24.38.2 static/runtime reports and a focused intentional-failure + Restart regression test; no Poached Eggs replay required.
+
+
+v0.26.125 / Stage 24.39.0
+- Stage24.38.2 runtime validation closes the original LEVEL FAILED page regression: boot retains levelFailed as a 24-item table; terminal failure reaches levelFailed; Restart reloads Level1; no Lua/GPU/fatal failure.
+- Begins Mighty Hoax with untouched Pack4 map 4-1..4-5: LevelP2_103,LevelP2_91,LevelP2_65,LevelP2_96,LevelP2_69 under data/levels/pack4/.
+- Transports exact retained Theme4 families: INGAME_PARALLAX_4 DAT/PVR and INGAME_THEME_GROUND_4 PVR; sky/foreground reuse proven INGAME_SKIES_1/INGAME_GROUNDS_1.
+- Extends generic SpriteDB scene bootstrap and MaskedImage fill selection to Theme4; adds read-only levelSelectionPagesExtra/Pack4 map + Next probes.
+- No Mighty Hoax level-specific gameplay, physics, score, save, unlock, forced Next/theme completion, or renderer geometry hack.
+
+
+v0.26.126 / Stage24.40.0
+- Diagnosed Mighty Hoax 4-1 first-entry crash as the still-headless native polygon boundary, not Theme4 rendering.
+- Reconstructed generic ARMv7 clearVertices/addVertex/createPolygon with accumulated b2Vec2 vertices, b2PolygonShape::Set, recovered 0.1f skin, standard BodyDef/FixtureDef material flow, render metadata, and Lua object materialization.
+- Added ARMv7 fail-closed polygon contract and focused Mighty Hoax runtime telemetry.
+- No LevelP2_103 gameplay/progression special case.
+
+
+v0.26.128 / Stage 24.40.2
+- Runtime baseline: v0.26.127 Mighty Hoax 4-6..4-10 completed cleanly.
+- Transport original Pack4 4-11..4-21: LevelP2_82,66,104,210,83,79,77,114,81,68,95.
+- Add read-only full Pack4 1..21 map + Next/page-completion telemetry.
+- No per-level gameplay/progression override; generic polygon/Theme4 paths retained unchanged.
+
+v0.26.129 / Stage 24.41.0
+- Runtime baseline: v0.26.128 completes Mighty Hoax 4-11..4-21 cleanly and stock LevelP2_95 Next enters theme4Complete, persists settings.theme4Completed=true, then returns to levelSelectionPagesExtra.
+- Diagnoses the Mighty Hoax episode-card Ovi banner as a generic native contract debt: untouched hasLevelPack2() calls checkForLuaFile(data/levels/pack4/LevelP2_103.lua), while the retained Stage24.31.0 audit bridge still returned nil.
+- Restores GameLua::checkForLuaFile as a read-only boolean existence query using the already-reconstructed app-private Lua resource resolver. Untouched prepareMenuPage remains sole owner of appStore/score/stars/selectable visibility; no AVAILABLE_ON_APP_STORE or episode-specific visual mutation is added.
+- Starts Mighty Hoax page/theme 5 through 5-10 using untouched Pack5 order: LevelP2_78,100,92,94,89,73,76,122,99,84 under data/levels/pack5/.
+- Transports exact retained Theme5 families INGAME_PARALLAX_5 DAT/PVR and INGAME_THEME_GROUND_5 PVR and extends the same generic scene/MaskedImage consumers already validated for Themes1-4.
+- Adds passive checkForLuaFile/Pack5/Theme5 runtime telemetry and a focused episode-card + 5-1..5-10 test. No gameplay, physics, renderer geometry, save, unlock, forced Next, or theme completion override.
+v0.26.130 / Stage 24.41.1
+- Runtime baseline: v0.26.129 validates Mighty Hoax 5-1..5-10 plus generic checkForLuaFile episode-card ownership with no runtime failures.
+- Changes QA cadence to original page/theme boundaries instead of arbitrary ten-level batches.
+- Transports untouched Pack5 remainder: 5-11=LevelP2_86, 5-12=LevelP2_74, 5-13=LevelP2_115, 5-14=LevelP2_98, 5-15=LevelP2_71, 5-16=LevelP2_72, 5-17=LevelP2_87, 5-18=LevelP2_93, 5-19=LevelP2_67, 5-20=LevelP2_97, 5-21=LevelP2_90.
+- Adds passive full Pack5 1..21 map and stock Next/page-completion telemetry. No gameplay/physics/renderer/save/unlock/forced theme5 completion override.
+
+
+
+v0.26.131 / Stage 24.42.0
+- Runtime baseline closes Mighty Hoax 5-11..5-21; LevelP2_90 enters stock theme5Complete and settings.theme5Completed=true persists with no runtime failure.
+- Starts Danger Above using one natural 15-level page QA boundary: Pack6 6-1..6-15 = LevelP3_212,134,162,271,224,253,225,232,150,211,223,226,215,220,231.
+- Transports exact retained Theme6 asset families: INGAME_SKIES_2, INGAME_PARALLAX_6, shared INGAME_GROUNDS_1, and INGAME_THEME_GROUND_6.
+- Extends the existing generic SpriteDB scene bootstrap and MaskedImage fill selection to Theme6.
+- Adds passive BOOMERANG telemetry; untouched updateGame remains specialty owner and generic native applyForce remains the Box2D consumer.
+- No Danger Above level-specific gameplay, physics, score, save, unlock, forced completion, or Boomerang behavior override.
+
+
+v0.26.132 / Stage 24.42.1
+- Diagnostic baseline: Danger Above 6-1..6-4 pass; 6-5 Boomerang specialty activates correctly, then a wood-destruction contact hits the old Stage16 fail-closed nonlegacy deferred-velocity path.
+- Reconstructs the exact ARMv7 alternate bird-destruction formula from BeginContact 0x57898..0x578F0: scale=((collisionForce-strengthBefore)/collisionForce)*velocityMultiplier, upper-clamped to 1; store deferred velocity; mark pending; disable current contact.
+- Models the 32-bit RenderObjectData pending slot semantically by object name and consumes it post-Step/post-removeBlocks before render-history capture/next fixed Step. The nonlegacy producer does not call SetLinearVelocity immediately.
+- Adds passive glass/wood physics-enable audit: pre-first-step + first 12 fixed-step body/fixture snapshots and wood<->glass Begin/End contact/manifold telemetry.
+- Audit is observe-only: no friction, restitution, gravity, sleep, body, fixture or contact state is changed by the glass/wood instrumentation.
+- No Boomerang- or LevelP3-specific gameplay branch.
+
+
+v0.26.133 / Stage 24.43.0
+- Partial Stage24.42.1 runtime proves the generic nonlegacy deferred bird-velocity fix survives the old 6-5 Boomerang crash and completed 6-5..6-12; Danger Above 6-13..6-15 remain to close the page.
+- Reclassifies the Mighty Hoax 5-11 fidelity discrepancy as a likely missing native joint/constraint rather than generic wood/glass contact: a flag-like polygon remains suspended in the original but falls in the port once physics starts.
+- Adds discovery-only wrappers for createJoint/destroyJoint that log exact Lua arguments and matching live body state without creating/destroying any b2Joint.
+- Adds a build-time ARMv7 contract that captures full createJointLua/destroyJointLua disassembly plus setLevelLimits/setMaxTranslation/setGameOn bodies for the next reconstruction pass.
+- Adds observe-only argument telemetry for setLevelLimits, setMaxTranslation and setGameOn; no bounds/lifecycle behavior is synthesized yet.
+- No LevelP2_86/5-11-specific branch and no gameplay, physics constant, save, renderer, progression or asset change.
+v0.26.135 / Stage 24.43.1
+- Stage24.43.0a live discovery found the canonical missing-joint failure in Danger Above 6-15 (LevelP3_231): nine createJoint calls per load connect pigs to static balloon bodies, all type=1/coordType=2/local anchors 0,0; the discovery build performed no native mutation and the level self-scored about 55,920 before any bird was shot.
+- ARMv7 GameLua::createJointLua proves type=1 constructs Box2D joint type 3 (b2DistanceJointDef), collideConnected=false, frequencyHz=4.0, dampingRatio=0.5; coordType 0 uses body origins, coordType 1 consumes world coordinates and subtracts body positions, coordType 2 consumes local anchors and computes world distance.
+- Reconstructs generic createJoint(type=1) and destroyJoint(name), native name/body bookkeeping, level-reset/body-destroy record hygiene, and original objects.joints[name] metadata keys name/end1/end2/type/coordType/x1/y1/x2/y2. No LevelP3_231, pig, balloon, or 5-11 branch.
+- Keeps Stage24.43.0 argument/BODY_MATCH telemetry and keeps setLevelLimits/setMaxTranslation/setGameOn strictly OBSERVE_ONLY.
+- Previous diagnostic also closes stock Theme6 progression: 6-14/6-15 completed, settings.theme6Completed=true, theme6Complete -> gotoLevelSelectionPack3 -> levelSelectionPagesPack3. Physical fidelity of 6-15 still requires this joint regression.
+
+
+[v0.26.136 / Stage24.44.0]
+- Runtime closes the type=1 distance-joint fidelity failure: 6-15 no longer self-scores before input; 5-11 materializes the suspended-structure joint generically.
+- Reconstructs ARMv7 setMaxTranslation, including Rovio fork mutability: stock pinned Box2D 2.1.2 max-translation macros are converted at build time into writable 2.0/4.0 float32 globals, then the setter writes value/value^2 exactly.
+- Mirrors only proven setLevelLimits integer state and adds passive off-bound body/end-state telemetry; no bounds enforcement yet.
+- Adds full-GameLua ARMv7 +0x24c/+0x250 consumer discovery and framework lifecycle hints for the next contract pass.
+
+
+v0.26.141 / Stage 24.44.3
+- Live v0.26.140 closes the level-limit frozen consumer: three 1-1 maxX crossings write frozen=true and untouched Lua removes the birds within 1-2 frames; the old ~19 s linger disappears and stock LEVEL FAILED follows normally.
+- Resolves GameLua::setGameOn(bool) through App+4 OSInterface and original AndroidOSInterface vtable slot +0x18 to allowSleep(!gameOn).
+- Proves shipping AndroidOSInterface::allowSleep(bool) is exactly one ARM instruction (bx lr), so the exact Android contract is a semantic request with no platform side effect.
+- Preserves that no-op in ARM64 and adds build/runtime witnesses; does not synthesize KEEP_SCREEN_ON, pause state, physics mutation, or menu/gameplay special cases.
+
+
+v0.26.147 / Stage 24.46.3
+- Runtime baseline closes The Big Setup page2: all pack10 levels 10-1..10-15 completed/persisted; LevelP4_462 reaches stock theme10Complete and settings.theme10Completed=true with no Lua/GPU/fatal/GL error.
+- Records data-driven scene evolution on page2: 10-1..10-2 theme11, 10-3..10-11 theme12, 10-12..10-15 theme13; no new renderer patch is needed.
+- Transports the untouched final The Big Setup page / pack11: LevelP4_463,464,465,466,467,468,469,470,471,472,473,474,475,477,478.
+- Adds read-only pack11 map/context telemetry for themeIndex=11/worldNumber=11/pageIndex=3 and focused final-page runtime capture.
+- Preserves untouched Lua ownership of theme11Completed, theme11Complete, gameFinishedLP4 and the final Next ordering; no per-level, completion, renderer, physics, save, or episode-finish hack.
+
+
+v0.26.159 / Stage24.48.1
+- Release-branding-only pass: installed label is now exactly Angry Birds.
+- Launcher icon is recovered at build time from the user's original extracted APK/resources and staged as @drawable/app_icon; no Rovio icon is distributed in the source archive.
+- aapt now packages the generated res tree and post-package badging fails closed on label/icon mismatch.
+- Development manifest version synchronized to 0.26.159 / 26159.
+- Runtime engine and CMake remain frozen against the v0.26.157 baseline.

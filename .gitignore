@@ -1,0 +1,46 @@
+﻿# Build outputs
+/build/
+/b24/
+/dist/
+/stage24-output/
+/stage24-apk-work/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Android packages / signing sidecars
+*.apk
+*.apks
+*.aab
+*.idsig
+
+# Signing material
+*.keystore
+*.jks
+*.p12
+*.pfx
+
+# Temporary / backup files
+*.bak
+*.tmp
+*.log
+*.orig
+*~
+
+# CMake / Ninja generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+build.ninja
+.ninja_deps
+.ninja_log
+compile_commands.json
+
+# IDE / OS noise
+.vscode/
+.idea/
+.vs/
+.DS_Store
+Thumbs.db
+desktop.ini

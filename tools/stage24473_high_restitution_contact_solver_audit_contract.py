@@ -1,0 +1,37 @@
+#!/usr/bin/env python3
+import pathlib, sys
+if len(sys.argv)!=5:
+    print('usage: stage24473_high_restitution_contact_solver_audit_contract.py <build.ps1> <cpp> <test.ps1> <native-audit.py>')
+    raise SystemExit(2)
+build=pathlib.Path(sys.argv[1]).read_text(encoding='utf-8-sig',errors='replace')
+cpp=pathlib.Path(sys.argv[2]).read_text(encoding='utf-8-sig',errors='replace')
+test=pathlib.Path(sys.argv[3]).read_text(encoding='utf-8-sig',errors='replace')
+native=pathlib.Path(sys.argv[4]).read_text(encoding='utf-8-sig',errors='replace')
+print('ANGRY_STAGE24_47_3_HIGH_RESTITUTION_CONTACT_SOLVER_AUDIT_CONTRACT 1')
+print('policy=DIAGNOSTIC_ONLY; no contact/joint/body/Lua mutation')
+print('reproA=LevelGE_2 free ExtraRubberBall / BLOCK_BEACHBALL contacts')
+print('reproB=LevelP3_306 / 8-3 ExtraTrampoline network cross-check')
+print('goal=cross-proof ARMv7 high-restitution contact velocityBias/normal impulse before changing restitution or spring behavior')
+checks=[]
+def gate(n,v):
+    checks.append((n,bool(v))); print(f'{n}={"PASS" if v else "FAIL"}')
+gate('runtime_contact_begin_after_present','[stage24.47.3-contact] BEGIN' in cpp and '[stage24.47.3-contact] AFTER' in cpp)
+gate('runtime_isolation_counts','jointEdgeCount24473' in cpp and 'touchingContactCount24473' in cpp and 'isolatedCandidate' in cpp)
+gate('runtime_bounce_ratio','bounceRatio' in cpp and 'stockVelocityBiasFromBegin' in cpp)
+gate('runtime_ratio_caveat','RATIOS_ARE_DIAGNOSTIC_NOT_SOLVER_INTERNALS' in cpp)
+gate('native_audit_wired','stage24473_high_restitution_contact_solver_native_audit.py' in build and 'stage24.47.3-high-restitution-contact-solver-native-audit.txt' in build)
+gate('native_targets_contact_solver', all(x in native for x in ('b2ContactSolver::b2ContactSolver','InitVelocityConstraints','SolveVelocityConstraints')))
+gate('egg2_isolation_test','LevelGE_2' in test and 'ExtraRubberBall' in test)
+gate('8_3_crosscheck_test','LevelP3_306' in test and '8-3' in test)
+gate('distance_joint_audit_retained','stage24472_distance_joint_spring_audit_contract.py' in build)
+gate('rubber_audit_retained','stage24471_rubber_physics_audit_contract.py' in build)
+gate('fixed_step_retained','world.Step(dt, 10, 10);' in cpp)
+start=cpp.find('static int jointEdgeCount24473')
+end=cpp.find('bool isRubberJoint24472', start)
+block=cpp[start:end] if start>=0 and end>start else ''
+mutators=('SetLinearVelocity(','SetAngularVelocity(','ApplyImpulse(','ApplyForce(','SetRestitution(','SetFriction(','CreateJoint(','DestroyJoint(','SetTransform(')
+gate('contact_observer_no_physics_mutators', bool(block) and not any(x in block for x in mutators))
+gate('no_level_specific_physics_branch','LevelGE_2' not in block and 'LevelP3_306' not in block and 'ExtraRubberBall' not in block)
+ok=all(v for _,v in checks)
+print('verdict='+('PASS' if ok else 'FAIL'))
+raise SystemExit(0 if ok else 1)

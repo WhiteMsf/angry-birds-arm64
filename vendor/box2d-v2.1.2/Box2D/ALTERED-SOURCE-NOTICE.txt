@@ -1,0 +1,16 @@
+BOX2D 2.1.2 - ALTERED SOURCE VERSION
+
+This vendored Box2D source tree is an altered source version derived from a
+historical Box2D 2.1.2 baseline.
+
+It contains or is built with compatibility changes selected for this
+Angry Birds ARM64 reconstruction and must not be represented as the original,
+unmodified Box2D distribution.
+
+Original Box2D copyright:
+Copyright (c) 2006-2010 Erin Catto
+
+The original license is preserved in License.txt and remains authoritative.
+See also:
+
+  docs/dependencies/BOX2D-SOURCE-NOTE.md

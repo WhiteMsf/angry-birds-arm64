@@ -1,0 +1,7 @@
+Angry Birds Classic ARM64 Reconstruction
+
+Independent preservation and compatibility project.
+Original Angry Birds game and proprietary content: Rovio Entertainment / respective rights holders.
+ARM64 reconstruction, technical direction, testing and release: <PROJECT_MAINTAINER>.
+AI-assisted engineering, reverse-engineering analysis, code reconstruction, debugging and documentation: ChatGPT by OpenAI, under maintainer direction and validation.
+Unofficial project. Not affiliated with or endorsed by Rovio Entertainment or OpenAI.

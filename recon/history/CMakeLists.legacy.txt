@@ -1,0 +1,728 @@
+cmake_minimum_required(VERSION 3.16)
+project(angry_arm64_bootstrap LANGUAGES C CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+if(ANDROID)
+  add_compile_definitions(PLATFORM_ANDROID PLATFORM_DEFINED)
+elseif(UNIX)
+  add_compile_definitions(PLATFORM_POSIX PLATFORM_DEFINED)
+endif()
+
+if(MSVC)
+  add_compile_options(/W3 /wd4996)
+else()
+  add_compile_options(-Wall -Wextra -Wno-deprecated-declarations -Wno-register -Wno-write-strings)
+endif()
+
+set(KA3D_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/ka3d)
+include_directories(
+  ${KA3D_ROOT}/include
+  ${KA3D_ROOT}/source/lua
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/include
+)
+
+set(KA3D_LANG
+  ${KA3D_ROOT}/source/lang/Character.cpp
+  ${KA3D_ROOT}/source/lang/Debug.cpp
+  ${KA3D_ROOT}/source/lang/DoubleLinkedList.cpp
+  ${KA3D_ROOT}/source/lang/Float.cpp
+  ${KA3D_ROOT}/source/lang/Format.cpp
+  ${KA3D_ROOT}/source/lang/Formattable.cpp
+  ${KA3D_ROOT}/source/lang/GlobalStorage.cpp
+  ${KA3D_ROOT}/source/lang/Globals.cpp
+  ${KA3D_ROOT}/source/lang/Hashtable.cpp
+  ${KA3D_ROOT}/source/lang/Huffman16.cpp
+  ${KA3D_ROOT}/source/lang/Integer.cpp
+  ${KA3D_ROOT}/source/lang/LinkedList.cpp
+  ${KA3D_ROOT}/source/lang/Math.cpp
+  ${KA3D_ROOT}/source/lang/MemoryPool.cpp
+  ${KA3D_ROOT}/source/lang/Object.cpp
+  ${KA3D_ROOT}/source/lang/OutOfMemoryException.cpp
+  ${KA3D_ROOT}/source/lang/SingleLinkedList.cpp
+  ${KA3D_ROOT}/source/lang/String.cpp
+  ${KA3D_ROOT}/source/lang/System.cpp
+  ${KA3D_ROOT}/source/lang/TempBuffer.cpp
+  ${KA3D_ROOT}/source/lang/Throwable.cpp
+  ${KA3D_ROOT}/source/lang/UTFConverter.cpp
+  ${KA3D_ROOT}/source/lang/internalError.cpp
+)
+add_library(ka3d_lang STATIC ${KA3D_LANG})
+
+set(KA3D_IO
+  ${KA3D_ROOT}/source/io/ByteArrayInputStream.cpp
+  ${KA3D_ROOT}/source/io/ByteArrayOutputStream.cpp
+  ${KA3D_ROOT}/source/io/CommandLineParser.cpp
+  ${KA3D_ROOT}/source/io/DataInputStream.cpp
+  ${KA3D_ROOT}/source/io/DataOutputStream.cpp
+  ${KA3D_ROOT}/source/io/FilterInputStream.cpp
+  ${KA3D_ROOT}/source/io/FilterOutputStream.cpp
+  ${KA3D_ROOT}/source/io/InputStream.cpp
+  ${KA3D_ROOT}/source/io/PathName.cpp
+  ${KA3D_ROOT}/source/io/PropertyParser.cpp
+  ${KA3D_ROOT}/source/io/std/FileInputStream.cpp
+  ${KA3D_ROOT}/source/io/std/FileOutputStream.cpp
+)
+add_library(ka3d_io STATIC ${KA3D_IO})
+target_link_libraries(ka3d_io PUBLIC ka3d_lang)
+
+set(LUA50_CORE
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/lapi.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/lcode.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/ldebug.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/ldo.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/ldump.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/lfunc.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/lgc.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/llex.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/lmem.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/lobject.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/lopcodes.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/lparser.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/lstate.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/lstring.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/ltable.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/ltm.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/lundump.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/lvm.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/lzio.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/lib/lauxlib.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/lib/lbaselib.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/lib/ldblib.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/lib/liolib.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/lib/lmathlib.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/lib/loadlib.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/lib/lstrlib.cpp
+  ${KA3D_ROOT}/source/lua/lua-5.0.2/src/lib/ltablib.cpp
+)
+add_library(lua50 STATIC ${LUA50_CORE})
+
+add_library(ka3d_lua STATIC
+  ${KA3D_ROOT}/source/lua/LuaObject.cpp
+  ${KA3D_ROOT}/source/lua/LuaStackRestore.cpp
+  ${KA3D_ROOT}/source/lua/LuaState.cpp
+  ${KA3D_ROOT}/source/lua/LuaTable.cpp
+)
+target_link_libraries(ka3d_lua PUBLIC ka3d_io ka3d_lang lua50)
+
+add_executable(stage0_smoke smoke.cpp)
+target_link_libraries(stage0_smoke PRIVATE ka3d_lua ka3d_io ka3d_lang lua50)
+
+if(WIN32)
+  target_link_libraries(stage0_smoke PRIVATE winmm)
+elseif(ANDROID)
+  target_link_libraries(stage0_smoke PRIVATE log dl m)
+elseif(UNIX)
+  target_link_libraries(stage0_smoke PRIVATE dl m)
+endif()
+
+
+# Stage 1: architecture-neutral decoder for the exact Angry Birds Lua 5.1
+# binary chunk format (size_t32 + float32), compiled natively for the host/Android.
+add_executable(stage1_chunk stage1_chunk.cpp)
+if(ANDROID)
+  target_link_libraries(stage1_chunk PRIVATE log dl m)
+elseif(UNIX)
+  target_link_libraries(stage1_chunk PRIVATE dl m)
+endif()
+
+
+# Stage 2: patched stock Lua 5.1.5 VM loads the real Angry Birds chunks.
+set(LUA51_SRC ${CMAKE_CURRENT_SOURCE_DIR}/vendor/lua-5.1.5/src)
+if(EXISTS ${LUA51_SRC}/lua.h)
+  set(LUA51_ANGRY_CORE
+    ${LUA51_SRC}/lapi.c ${LUA51_SRC}/lcode.c ${LUA51_SRC}/ldebug.c
+    ${LUA51_SRC}/ldo.c ${LUA51_SRC}/ldump.c ${LUA51_SRC}/lfunc.c
+    ${LUA51_SRC}/lgc.c ${LUA51_SRC}/llex.c ${LUA51_SRC}/lmem.c
+    ${LUA51_SRC}/lobject.c ${LUA51_SRC}/lopcodes.c ${LUA51_SRC}/lparser.c
+    ${LUA51_SRC}/lstate.c ${LUA51_SRC}/lstring.c ${LUA51_SRC}/ltable.c
+    ${LUA51_SRC}/ltm.c ${LUA51_SRC}/lundump.c ${LUA51_SRC}/lvm.c
+    ${LUA51_SRC}/lzio.c ${LUA51_SRC}/lauxlib.c
+    ${LUA51_SRC}/lbaselib.c ${LUA51_SRC}/ltablib.c
+    ${LUA51_SRC}/lstrlib.c ${LUA51_SRC}/lmathlib.c)
+  add_library(lua51_angry STATIC ${LUA51_ANGRY_CORE})
+  target_include_directories(lua51_angry PUBLIC ${LUA51_SRC})
+  if(NOT MSVC)
+    target_compile_options(lua51_angry PRIVATE -Wno-unused-function -Wno-unused-parameter)
+  endif()
+  add_executable(stage2_lua51_load stage2_lua51_load.cpp)
+  target_include_directories(stage2_lua51_load BEFORE PRIVATE ${LUA51_SRC})
+  target_link_libraries(stage2_lua51_load PRIVATE lua51_angry)
+  if(ANDROID)
+    target_link_libraries(stage2_lua51_load PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage2_lua51_load PRIVATE dl m)
+  endif()
+
+
+  # Stage 3: execute the original Angry Birds top-level Lua code.
+  # No GameLua native methods are called yet; this proves the real 2010 script
+  # initialization/class construction runs under the ARM64 Lua 5.1 VM.
+  add_executable(stage3_execute stage3_execute.cpp)
+  target_include_directories(stage3_execute BEFORE PRIVATE ${LUA51_SRC})
+  target_link_libraries(stage3_execute PRIVATE lua51_angry)
+  if(ANDROID)
+    target_link_libraries(stage3_execute PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage3_execute PRIVATE dl m)
+  endif()
+
+  # Stage 4: install the recovered 80-name GameLua API surface and call the
+  # original gamelogic.initialize() core on ARM64. initializeMenu is the one
+  # deliberate bypass because the six-file script archive does not include
+  # its wider save/menu dependency graph.
+  add_executable(stage4_initialize stage4_initialize.cpp)
+  target_include_directories(stage4_initialize BEFORE PRIVATE ${LUA51_SRC})
+  target_link_libraries(stage4_initialize PRIVATE lua51_angry)
+  if(ANDROID)
+    target_link_libraries(stage4_initialize PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage4_initialize PRIVATE dl m)
+  endif()
+endif()
+
+
+# Stage 5: period-correct Box2D 2.1.2, pinned externally by the build script.
+if(DEFINED BOX2D212_ROOT)
+  set(B2 ${BOX2D212_ROOT}/Box2D/Box2D)
+
+  add_library(box2d212 STATIC
+    ${B2}/Collision/b2BroadPhase.cpp
+    ${B2}/Collision/b2CollideCircle.cpp
+    ${B2}/Collision/b2CollidePolygon.cpp
+    ${B2}/Collision/b2Collision.cpp
+    ${B2}/Collision/b2Distance.cpp
+    ${B2}/Collision/b2DynamicTree.cpp
+    ${B2}/Collision/b2TimeOfImpact.cpp
+    ${B2}/Collision/Shapes/b2CircleShape.cpp
+    ${B2}/Collision/Shapes/b2PolygonShape.cpp
+    ${B2}/Common/b2BlockAllocator.cpp
+    ${B2}/Common/b2Math.cpp
+    ${B2}/Common/b2Settings.cpp
+    ${B2}/Common/b2StackAllocator.cpp
+    ${B2}/Dynamics/b2Body.cpp
+    ${B2}/Dynamics/b2ContactManager.cpp
+    ${B2}/Dynamics/b2Fixture.cpp
+    ${B2}/Dynamics/b2Island.cpp
+    ${B2}/Dynamics/b2World.cpp
+    ${B2}/Dynamics/b2WorldCallbacks.cpp
+    ${B2}/Dynamics/Contacts/b2CircleContact.cpp
+    ${B2}/Dynamics/Contacts/b2Contact.cpp
+    ${B2}/Dynamics/Contacts/b2ContactSolver.cpp
+    ${B2}/Dynamics/Contacts/b2PolygonAndCircleContact.cpp
+    ${B2}/Dynamics/Contacts/b2PolygonContact.cpp
+    ${B2}/Dynamics/Contacts/b2TOISolver.cpp
+    ${B2}/Dynamics/Joints/b2DistanceJoint.cpp
+    ${B2}/Dynamics/Joints/b2FrictionJoint.cpp
+    ${B2}/Dynamics/Joints/b2GearJoint.cpp
+    ${B2}/Dynamics/Joints/b2Joint.cpp
+    ${B2}/Dynamics/Joints/b2LineJoint.cpp
+    ${B2}/Dynamics/Joints/b2MouseJoint.cpp
+    ${B2}/Dynamics/Joints/b2PrismaticJoint.cpp
+    ${B2}/Dynamics/Joints/b2PulleyJoint.cpp
+    ${B2}/Dynamics/Joints/b2RevoluteJoint.cpp
+    ${B2}/Dynamics/Joints/b2WeldJoint.cpp
+  )
+  target_include_directories(box2d212 PUBLIC ${BOX2D212_ROOT}/Box2D)
+  set_target_properties(box2d212 PROPERTIES CXX_STANDARD 11 CXX_STANDARD_REQUIRED ON)
+  target_compile_options(box2d212 PRIVATE
+    -Wno-unused-parameter
+    -Wno-deprecated-declarations
+    -Wno-register
+    # Stage24.47.5: ARMv7 soft-float helpers round multiply/add separately.
+    # Prevent AArch64 Clang from silently contracting a*b+c into FMADD/FMSUB
+    # inside the pinned Box2D solver. This is a global numerical-fidelity
+    # policy for Box2D, not a level/material special case.
+    -ffp-contract=off
+  )
+
+  add_executable(stage5_box2d_bridge stage5_box2d_bridge.cpp)
+  target_include_directories(stage5_box2d_bridge BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage5_box2d_bridge PRIVATE lua51_angry box2d212)
+  if(ANDROID)
+    target_link_libraries(stage5_box2d_bridge PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage5_box2d_bridge PRIVATE dl m)
+  endif()
+endif()
+
+
+# Stage 6: materialize the real original Level1 using the original Lua
+# createObject() and the recovered GameLua/Box2D bridge.
+if(DEFINED BOX2D212_ROOT)
+  add_executable(stage6_level1 stage6_level1.cpp)
+  target_include_directories(stage6_level1 BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage6_level1 PRIVATE lua51_angry box2d212)
+  if(ANDROID)
+    target_link_libraries(stage6_level1 PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage6_level1 PRIVATE dl m)
+  endif()
+endif()
+
+
+# Stage 7: call the original gamelogic.loadLevelInternal() and reconstruct only
+# the native GameLua loadLevel(String) boundary + headless platform services.
+if(DEFINED BOX2D212_ROOT)
+  add_executable(stage7_original_loader stage7_original_loader.cpp)
+  target_include_directories(stage7_original_loader BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage7_original_loader PRIVATE lua51_angry box2d212)
+  if(ANDROID)
+    target_link_libraries(stage7_original_loader PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage7_original_loader PRIVATE dl m)
+  endif()
+endif()
+
+
+# Stage 8: original outer update(dt, frameTime) + original updateGame() over
+# the real original Level1, with a reconstructed native physics<->Lua frame bridge.
+if(DEFINED BOX2D212_ROOT)
+  add_executable(stage8_original_update stage8_original_update.cpp)
+  target_include_directories(stage8_original_update BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage8_original_update PRIVATE lua51_angry box2d212)
+  if(ANDROID)
+    target_link_libraries(stage8_original_update PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage8_original_update PRIVATE dl m)
+  endif()
+endif()
+
+
+# Stage 9: real Box2D contact-listener telemetry over the original Level1
+# frame loop. This pass validates the native BeginContact boundary before
+# collision callbacks are allowed to mutate gameplay state.
+if(DEFINED BOX2D212_ROOT)
+  add_executable(stage9_contact_probe stage9_contact_probe.cpp)
+  target_include_directories(stage9_contact_probe BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage9_contact_probe PRIVATE lua51_angry box2d212)
+  if(ANDROID)
+    target_link_libraries(stage9_contact_probe PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage9_contact_probe PRIVATE dl m)
+  endif()
+endif()
+
+
+# Stage 10: recovered non-destructive ARMv7 block/block damage mutation plus
+# original Lua blockCollision() over real Level1 Box2D contacts.
+if(DEFINED BOX2D212_ROOT)
+  add_executable(stage10_block_damage stage10_block_damage.cpp)
+  target_include_directories(stage10_block_damage BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage10_block_damage PRIVATE lua51_angry box2d212)
+  if(ANDROID)
+    target_link_libraries(stage10_block_damage PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage10_block_damage PRIVATE dl m)
+  endif()
+endif()
+
+
+# Stage 11: reconstruct the core ordering/timing of ARMv7 GameLua::update(float):
+# 30 Hz accumulator-driven Box2D Step(1/30,10,10), original removeBlocks()
+# after every physics step, ClearForces, physics->Lua sync, then Lua update(dt,dt).
+if(DEFINED BOX2D212_ROOT)
+  add_executable(stage11_native_frame_driver stage11_native_frame_driver.cpp)
+  target_include_directories(stage11_native_frame_driver BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage11_native_frame_driver PRIVATE lua51_angry box2d212)
+  if(ANDROID)
+    target_link_libraries(stage11_native_frame_driver PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage11_native_frame_driver PRIVATE dl m)
+  endif()
+endif()
+
+
+# Stage 12: combine the recovered ARMv7 non-destructive collision-damage core
+# with the native-order 30 Hz fixed-step driver from Stage 11.
+if(DEFINED BOX2D212_ROOT)
+  add_executable(stage12_damage_native_driver stage12_damage_native_driver.cpp)
+  target_include_directories(stage12_damage_native_driver BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage12_damage_native_driver PRIVATE lua51_angry box2d212)
+  if(ANDROID)
+    target_link_libraries(stage12_damage_native_driver PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage12_damage_native_driver PRIVATE dl m)
+  endif()
+endif()
+
+
+# Stage 13: controlled non-goal block destruction through the recovered ARMv7
+# <=0 damage branch -> Lua deadBlocks -> original removeBlocks() ->
+# reconstructed native removeObject() -> b2World::DestroyBody.
+if(DEFINED BOX2D212_ROOT)
+  add_executable(stage13_destruction_pipeline stage13_destruction_pipeline.cpp)
+  target_include_directories(stage13_destruction_pipeline BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage13_destruction_pipeline PRIVATE lua51_angry box2d212)
+  if(ANDROID)
+    target_link_libraries(stage13_destruction_pipeline PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage13_destruction_pipeline PRIVATE dl m)
+  endif()
+endif()
+
+
+# Stage 14: controlled active-RedBird contact corpus. Damage mutation remains
+# disabled; this stage crosses the bird/special contact boundary only.
+if(DEFINED BOX2D212_ROOT)
+  add_executable(stage14_bird_contact_probe stage14_bird_contact_probe.cpp)
+  target_include_directories(stage14_bird_contact_probe BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage14_bird_contact_probe PRIVATE lua51_angry box2d212)
+  if(ANDROID)
+    target_link_libraries(stage14_bird_contact_probe PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage14_bird_contact_probe PRIVATE dl m)
+  endif()
+endif()
+
+
+# Stage 15: recovered exactly-one-bird ARMv7 damageFactors branch.
+if(DEFINED BOX2D212_ROOT)
+  add_executable(stage15_bird_damage_probe stage15_bird_damage_probe.cpp)
+  target_include_directories(stage15_bird_damage_probe BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage15_bird_damage_probe PRIVATE lua51_angry box2d212)
+  if(ANDROID)
+    target_link_libraries(stage15_bird_damage_probe PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage15_bird_damage_probe PRIVATE dl m)
+  endif()
+endif()
+
+
+# Stage 16: bird-caused destruction + legacy post-destruction velocity path.
+if(DEFINED BOX2D212_ROOT)
+  add_executable(stage16_bird_destruction_probe stage16_bird_destruction_probe.cpp)
+  target_include_directories(stage16_bird_destruction_probe BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage16_bird_destruction_probe PRIVATE lua51_angry box2d212)
+  if(ANDROID)
+    target_link_libraries(stage16_bird_destruction_probe PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage16_bird_destruction_probe PRIVATE dl m)
+  endif()
+endif()
+
+
+# Stage 17: original Lua input/drag/release slingshot path.
+if(DEFINED BOX2D212_ROOT)
+  add_executable(stage17_original_sling_launch stage17_original_sling_launch.cpp)
+  target_include_directories(stage17_original_sling_launch BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage17_original_sling_launch PRIVATE lua51_angry box2d212)
+  if(ANDROID)
+    target_link_libraries(stage17_original_sling_launch PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage17_original_sling_launch PRIVATE dl m)
+  endif()
+endif()
+
+
+# Stage 18: original slingshot launch into natural recovered bird damage.
+if(DEFINED BOX2D212_ROOT)
+  add_executable(stage18_launch_damage stage18_launch_damage.cpp)
+  target_include_directories(stage18_launch_damage BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage18_launch_damage PRIVATE lua51_angry box2d212)
+  if(ANDROID)
+    target_link_libraries(stage18_launch_damage PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage18_launch_damage PRIVATE dl m)
+  endif()
+endif()
+
+
+# Stage 19: one full natural shot with both damage families and lifecycle.
+if(DEFINED BOX2D212_ROOT)
+  add_executable(stage19_full_turn stage19_full_turn.cpp)
+  target_include_directories(stage19_full_turn BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage19_full_turn PRIVATE lua51_angry box2d212)
+  if(ANDROID)
+    target_link_libraries(stage19_full_turn PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage19_full_turn PRIVATE dl m)
+  endif()
+endif()
+
+# Stage 20: two consecutive original input-driven shots.
+if(DEFINED BOX2D212_ROOT)
+  add_executable(stage20_two_shots stage20_two_shots.cpp)
+  target_include_directories(stage20_two_shots BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage20_two_shots PRIVATE lua51_angry box2d212)
+  if(ANDROID)
+    target_link_libraries(stage20_two_shots PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage20_two_shots PRIVATE dl m)
+  endif()
+endif()
+
+
+# Stage 21: play the complete Level1 bird sequence to original win/fail state.
+if(DEFINED BOX2D212_ROOT)
+  add_executable(stage21_full_level stage21_full_level.cpp)
+  target_include_directories(stage21_full_level BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage21_full_level PRIVATE lua51_angry box2d212)
+  if(ANDROID)
+    target_link_libraries(stage21_full_level PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage21_full_level PRIVATE dl m)
+  endif()
+endif()
+
+# Stage 22: Stage21 gameplay plus a self-contained visual debug replay.
+if(DEFINED BOX2D212_ROOT)
+  add_executable(stage22_visual_replay stage22_visual_replay.cpp)
+  target_include_directories(stage22_visual_replay BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage22_visual_replay PRIVATE lua51_angry box2d212)
+  if(ANDROID)
+    target_link_libraries(stage22_visual_replay PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage22_visual_replay PRIVATE dl m)
+  endif()
+endif()
+
+# Stage 22.5: idle-control pig collision/damage fidelity audit.
+if(DEFINED BOX2D212_ROOT)
+  add_executable(stage22_5_pig_fidelity_audit stage22_5_pig_fidelity_audit.cpp)
+  target_include_directories(stage22_5_pig_fidelity_audit BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage22_5_pig_fidelity_audit PRIVATE lua51_angry box2d212)
+  if(ANDROID)
+    target_link_libraries(stage22_5_pig_fidelity_audit PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage22_5_pig_fidelity_audit PRIVATE dl m)
+  endif()
+endif()
+
+# Stage 22.6: A/B idle pig audit for the recovered ARMv7 polygon skin radius.
+if(DEFINED BOX2D212_ROOT)
+  add_executable(stage22_6_polygon_skin_audit stage22_6_polygon_skin_audit.cpp)
+  target_include_directories(stage22_6_polygon_skin_audit BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage22_6_polygon_skin_audit PRIVATE lua51_angry box2d212)
+  if(ANDROID)
+    target_link_libraries(stage22_6_polygon_skin_audit PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage22_6_polygon_skin_audit PRIVATE dl m)
+  endif()
+endif()
+
+
+# Stage 22.7: promote the recovered ARMv7 polygon skin to normal gameplay
+# and rerun the complete Level1 lifecycle as a fidelity regression gate.
+if(DEFINED BOX2D212_ROOT)
+  add_executable(stage22_7_recovered_physics_regression stage22_7_recovered_physics_regression.cpp)
+  target_include_directories(stage22_7_recovered_physics_regression BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage22_7_recovered_physics_regression PRIVATE lua51_angry box2d212)
+  if(ANDROID)
+    target_link_libraries(stage22_7_recovered_physics_regression PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage22_7_recovered_physics_regression PRIVATE dl m)
+  endif()
+endif()
+
+# Stage 23.0: decode original KA3D SPRT sheet/texture metadata and map every
+# materialized Level1 object's sprite to an exact sheet, texture, rect and pivot.
+if(DEFINED BOX2D212_ROOT)
+  add_executable(stage23_0_sprite_manifest_audit stage23_0_sprite_manifest_audit.cpp)
+  target_include_directories(stage23_0_sprite_manifest_audit BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage23_0_sprite_manifest_audit PRIVATE lua51_angry box2d212)
+  if(ANDROID)
+    target_link_libraries(stage23_0_sprite_manifest_audit PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage23_0_sprite_manifest_audit PRIVATE dl m)
+  endif()
+endif()
+
+# Stage 23.1: inspect the exact original .pvr payloads extracted from the APK's
+# .pvr.zip containers and prove header/pixel-format/mipmap byte consistency.
+add_executable(stage23_1_pvr_payload_audit stage23_1_pvr_payload_audit.cpp)
+if(ANDROID)
+  target_link_libraries(stage23_1_pvr_payload_audit PRIVATE log m)
+elseif(UNIX)
+  target_link_libraries(stage23_1_pvr_payload_audit PRIVATE m)
+endif()
+
+# Stage 23.2: offline replay with original 1.4.2 sprite atlas pixels, exact
+# SPRT rect/pivot metadata and the recovered ARM64 gameplay transforms.
+# The accompanying PowerShell script decodes the proven RGBA4444 PVR payloads
+# to debug-only PNG views for HTML canvas display; the original PVR bytes remain
+# the contract for the later live GLES renderer.
+if(DEFINED BOX2D212_ROOT)
+  add_executable(stage23_2_original_sprite_replay stage23_2_original_sprite_replay.cpp)
+  target_include_directories(stage23_2_original_sprite_replay BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage23_2_original_sprite_replay PRIVATE lua51_angry box2d212)
+  if(ANDROID)
+    target_link_libraries(stage23_2_original_sprite_replay PRIVATE log dl m)
+  elseif(UNIX)
+    target_link_libraries(stage23_2_original_sprite_replay PRIVATE dl m)
+  endif()
+endif()
+
+# Stage 23.3: create a real EGL pbuffer + OpenGL ES 1.x fixed-function context
+# on Android arm64, upload the untouched original RGBA4444 bird atlas, render
+# BIRD_RED using the recovered SPRT rect, and compare GPU readback to source.
+if(ANDROID)
+  add_executable(stage23_3_gles1_pbuffer_sprite stage23_3_gles1_pbuffer_sprite.cpp)
+  target_link_libraries(stage23_3_gles1_pbuffer_sprite PRIVATE EGL GLESv1_CM log m)
+endif()
+
+# Stage 23.5: render deterministic full-Level1 gameplay snapshots through a
+# real ARM64 EGL + GLES1 fixed-function pipeline using the original two
+# RGBA4444 atlases and the Stage 23.4 recovered texture/blend/matrix states.
+if(ANDROID AND DEFINED BOX2D212_ROOT)
+  add_executable(stage23_5_gles1_level1_scene stage23_5_gles1_level1_scene.cpp)
+  target_include_directories(stage23_5_gles1_level1_scene BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage23_5_gles1_level1_scene PRIVATE
+    lua51_angry box2d212 EGL GLESv1_CM log dl m
+  )
+endif()
+
+# Stage 23.6A: reconstruct the original ARMv7 GameLua RenderObjectData
+# two-slot transform history/interpolation path and feed those published
+# transforms to Lua + the full Level1 GLES1 snapshot renderer.
+if(ANDROID AND DEFINED BOX2D212_ROOT)
+  add_executable(stage23_6a_renderobject_interpolation stage23_6a_renderobject_interpolation.cpp)
+  target_include_directories(stage23_6a_renderobject_interpolation BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage23_6a_renderobject_interpolation PRIVATE
+    lua51_angry box2d212 EGL GLESv1_CM log dl m
+  )
+endif()
+
+# Stage 23.6C: restore the original KA3D Hashtable iteration and the four
+# ARMv7 GameLua::drawGame RenderObjectData pass classes on top of the already
+# recovered camera/interpolation/GLES1 path.
+if(ANDROID AND DEFINED BOX2D212_ROOT)
+  add_executable(stage23_6c_original_draw_order stage23_6c_original_draw_order.cpp)
+  target_include_directories(stage23_6c_original_draw_order BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+  )
+  target_link_libraries(stage23_6c_original_draw_order PRIVATE
+    lua51_angry box2d212 EGL GLESv1_CM log dl m
+  )
+endif()
+
+# Stage 24: first live Android window integration.  This is no longer a
+# /data/local/tmp pbuffer executable: it is the native shared library loaded
+# by android.app.NativeActivity.  The recovered Level1 Lua/Box2D/GLES1/camera/
+# interpolation/KA3D draw order are rendered into a real ANativeWindow and
+# Android MotionEvents are published to original updateGame() as LBUTTON/cursor.
+if(ANDROID AND DEFINED BOX2D212_ROOT)
+  if(DEFINED CMAKE_ANDROID_NDK)
+    set(STAGE24_NATIVE_APP_GLUE "${CMAKE_ANDROID_NDK}/sources/android/native_app_glue")
+  else()
+    set(STAGE24_NATIVE_APP_GLUE "${ANDROID_NDK}/sources/android/native_app_glue")
+  endif()
+  if(NOT EXISTS "${STAGE24_NATIVE_APP_GLUE}/android_native_app_glue.c")
+    message(FATAL_ERROR "android_native_app_glue.c not found under ${STAGE24_NATIVE_APP_GLUE}")
+  endif()
+
+  add_library(stage24_live_surface SHARED
+    stage24_live_surface.cpp
+    "${STAGE24_NATIVE_APP_GLUE}/android_native_app_glue.c"
+  )
+  target_include_directories(stage24_live_surface BEFORE PRIVATE
+    ${LUA51_SRC}
+    ${BOX2D212_ROOT}/Box2D
+    "${STAGE24_NATIVE_APP_GLUE}"
+  )
+  set(STAGE24_DISPLAY_MODE "wvga854" CACHE STRING "Stage24 test presentation: wvga854 or native")
+  set_property(CACHE STAGE24_DISPLAY_MODE PROPERTY STRINGS wvga854 native)
+  option(STAGE24282_GLOBAL_SPRITE_REGISTRY "ARMv7 two-string Resources::drawSprite uses global sprite registry" OFF)
+  if(STAGE24282_GLOBAL_SPRITE_REGISTRY)
+    target_compile_definitions(stage24_live_surface PRIVATE STAGE24282_GLOBAL_SPRITE_REGISTRY=1)
+  else()
+    target_compile_definitions(stage24_live_surface PRIVATE STAGE24282_GLOBAL_SPRITE_REGISTRY=0)
+  endif()
+  message(STATUS "Stage24.28.2 global sprite registry contract: ${STAGE24282_GLOBAL_SPRITE_REGISTRY}")
+  if(STAGE24_DISPLAY_MODE STREQUAL "native")
+    target_compile_definitions(stage24_live_surface PRIVATE
+      STAGE24_LIVE=1 STAGE24_DEBUG_LOGICAL_W=0 STAGE24_DEBUG_LOGICAL_H=0)
+  elseif(STAGE24_DISPLAY_MODE STREQUAL "wvga854")
+    target_compile_definitions(stage24_live_surface PRIVATE
+      STAGE24_LIVE=1 STAGE24_DEBUG_LOGICAL_W=854 STAGE24_DEBUG_LOGICAL_H=480)
+  else()
+    message(FATAL_ERROR "Unknown STAGE24_DISPLAY_MODE='${STAGE24_DISPLAY_MODE}' (expected wvga854 or native)")
+  endif()
+  message(STATUS "Stage24 display mode: ${STAGE24_DISPLAY_MODE}")
+  # Stage24.47.5: keep inline physics arithmetic in the live bridge under the
+  # same non-contracted float policy as box2d212.
+  target_compile_options(stage24_live_surface PRIVATE -ffp-contract=off)
+  target_link_libraries(stage24_live_surface PRIVATE
+    lua51_angry box2d212 android EGL GLESv1_CM OpenSLES mediandk log dl m
+  )
+  set_target_properties(stage24_live_surface PROPERTIES OUTPUT_NAME angryarm64)
+endif()
+

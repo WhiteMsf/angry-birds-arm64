@@ -1,0 +1,846 @@
+[
+  {
+    "source": "levels/pack1/Level1.lua",
+    "destination": "Level1.lua"
+  },
+  {
+    "source": "levels/pack1/Level1.lua",
+    "destination": "data/levels/pack1/Level1.lua"
+  },
+  {
+    "source": "levels/pack1/Level57.lua",
+    "destination": "data/levels/pack1/Level57.lua"
+  },
+  {
+    "source": "levels/pack1/Level53.lua",
+    "destination": "data/levels/pack1/Level53.lua"
+  },
+  {
+    "source": "levels/pack1/Level3.lua",
+    "destination": "data/levels/pack1/Level3.lua"
+  },
+  {
+    "source": "levels/pack1/Level6.lua",
+    "destination": "data/levels/pack1/Level6.lua"
+  },
+  {
+    "source": "levels/pack1/Level2.lua",
+    "destination": "data/levels/pack1/Level2.lua"
+  },
+  {
+    "source": "levels/pack1/Level4.lua",
+    "destination": "data/levels/pack1/Level4.lua"
+  },
+  {
+    "source": "levels/pack1/Level5.lua",
+    "destination": "data/levels/pack1/Level5.lua"
+  },
+  {
+    "source": "levels/pack1/Level7.lua",
+    "destination": "data/levels/pack1/Level7.lua"
+  },
+  {
+    "source": "levels/pack1/Level8.lua",
+    "destination": "data/levels/pack1/Level8.lua"
+  },
+  {
+    "source": "levels/pack1/Level9.lua",
+    "destination": "data/levels/pack1/Level9.lua"
+  },
+  {
+    "source": "levels/pack1/Level13.lua",
+    "destination": "data/levels/pack1/Level13.lua"
+  },
+  {
+    "source": "levels/pack1/Level10.lua",
+    "destination": "data/levels/pack1/Level10.lua"
+  },
+  {
+    "source": "levels/pack1/Level39.lua",
+    "destination": "data/levels/pack1/Level39.lua"
+  },
+  {
+    "source": "levels/pack1/Level12.lua",
+    "destination": "data/levels/pack1/Level12.lua"
+  },
+  {
+    "source": "levels/pack1/Level15.lua",
+    "destination": "data/levels/pack1/Level15.lua"
+  },
+  {
+    "source": "levels/pack1/Level17.lua",
+    "destination": "data/levels/pack1/Level17.lua"
+  },
+  {
+    "source": "levels/pack1/Level14.lua",
+    "destination": "data/levels/pack1/Level14.lua"
+  },
+  {
+    "source": "levels/pack1/Level16.lua",
+    "destination": "data/levels/pack1/Level16.lua"
+  },
+  {
+    "source": "levels/pack1/Level23.lua",
+    "destination": "data/levels/pack1/Level23.lua"
+  },
+  {
+    "source": "levels/pack1/Level44.lua",
+    "destination": "data/levels/pack1/Level44.lua"
+  },
+  {
+    "source": "levels/pack2/Level52.lua",
+    "destination": "data/levels/pack2/Level52.lua"
+  },
+  {
+    "source": "levels/pack2/Level34.lua",
+    "destination": "data/levels/pack2/Level34.lua"
+  },
+  {
+    "source": "levels/pack2/Level42.lua",
+    "destination": "data/levels/pack2/Level42.lua"
+  },
+  {
+    "source": "levels/pack2/Level24.lua",
+    "destination": "data/levels/pack2/Level24.lua"
+  },
+  {
+    "source": "levels/pack2/Level88.lua",
+    "destination": "data/levels/pack2/Level88.lua"
+  },
+  {
+    "source": "levels/pack2/Level36.lua",
+    "destination": "data/levels/pack2/Level36.lua"
+  },
+  {
+    "source": "levels/pack2/Level31.lua",
+    "destination": "data/levels/pack2/Level31.lua"
+  },
+  {
+    "source": "levels/pack2/Level21.lua",
+    "destination": "data/levels/pack2/Level21.lua"
+  },
+  {
+    "source": "levels/pack2/Level41.lua",
+    "destination": "data/levels/pack2/Level41.lua"
+  },
+  {
+    "source": "levels/pack2/Level76.lua",
+    "destination": "data/levels/pack2/Level76.lua"
+  },
+  {
+    "source": "levels/pack2/Level38.lua",
+    "destination": "data/levels/pack2/Level38.lua"
+  },
+  {
+    "source": "levels/pack2/Level35.lua",
+    "destination": "data/levels/pack2/Level35.lua"
+  },
+  {
+    "source": "levels/pack2/Level20.lua",
+    "destination": "data/levels/pack2/Level20.lua"
+  },
+  {
+    "source": "levels/pack2/Level26.lua",
+    "destination": "data/levels/pack2/Level26.lua"
+  },
+  {
+    "source": "levels/pack2/Level66.lua",
+    "destination": "data/levels/pack2/Level66.lua"
+  },
+  {
+    "source": "levels/pack2/Level85.lua",
+    "destination": "data/levels/pack2/Level85.lua"
+  },
+  {
+    "source": "levels/pack2/Level27.lua",
+    "destination": "data/levels/pack2/Level27.lua"
+  },
+  {
+    "source": "levels/pack2/Level32.lua",
+    "destination": "data/levels/pack2/Level32.lua"
+  },
+  {
+    "source": "levels/pack2/Level72.lua",
+    "destination": "data/levels/pack2/Level72.lua"
+  },
+  {
+    "source": "levels/pack2/Level90.lua",
+    "destination": "data/levels/pack2/Level90.lua"
+  },
+  {
+    "source": "levels/pack2/Level96.lua",
+    "destination": "data/levels/pack2/Level96.lua"
+  },
+  {
+    "source": "levels/pack3/Level43.lua",
+    "destination": "data/levels/pack3/Level43.lua"
+  },
+  {
+    "source": "levels/pack3/Level77.lua",
+    "destination": "data/levels/pack3/Level77.lua"
+  },
+  {
+    "source": "levels/pack3/Level28.lua",
+    "destination": "data/levels/pack3/Level28.lua"
+  },
+  {
+    "source": "levels/pack3/Level29.lua",
+    "destination": "data/levels/pack3/Level29.lua"
+  },
+  {
+    "source": "levels/pack3/Level87.lua",
+    "destination": "data/levels/pack3/Level87.lua"
+  },
+  {
+    "source": "levels/pack3/Level18.lua",
+    "destination": "data/levels/pack3/Level18.lua"
+  },
+  {
+    "source": "levels/pack3/Level91.lua",
+    "destination": "data/levels/pack3/Level91.lua"
+  },
+  {
+    "source": "levels/pack3/Level49.lua",
+    "destination": "data/levels/pack3/Level49.lua"
+  },
+  {
+    "source": "levels/pack3/Level45.lua",
+    "destination": "data/levels/pack3/Level45.lua"
+  },
+  {
+    "source": "levels/pack3/Level75.lua",
+    "destination": "data/levels/pack3/Level75.lua"
+  },
+  {
+    "source": "levels/pack3/Level51.lua",
+    "destination": "data/levels/pack3/Level51.lua"
+  },
+  {
+    "source": "levels/pack3/Level30.lua",
+    "destination": "data/levels/pack3/Level30.lua"
+  },
+  {
+    "source": "levels/pack3/Level79.lua",
+    "destination": "data/levels/pack3/Level79.lua"
+  },
+  {
+    "source": "levels/pack3/Level40.lua",
+    "destination": "data/levels/pack3/Level40.lua"
+  },
+  {
+    "source": "levels/pack3/Level59.lua",
+    "destination": "data/levels/pack3/Level59.lua"
+  },
+  {
+    "source": "levels/pack3/Level58.lua",
+    "destination": "data/levels/pack3/Level58.lua"
+  },
+  {
+    "source": "levels/pack3/Level95.lua",
+    "destination": "data/levels/pack3/Level95.lua"
+  },
+  {
+    "source": "levels/pack3/Level82.lua",
+    "destination": "data/levels/pack3/Level82.lua"
+  },
+  {
+    "source": "levels/pack3/Level22.lua",
+    "destination": "data/levels/pack3/Level22.lua"
+  },
+  {
+    "source": "levels/pack3/Level89.lua",
+    "destination": "data/levels/pack3/Level89.lua"
+  },
+  {
+    "source": "levels/pack3/Level81.lua",
+    "destination": "data/levels/pack3/Level81.lua"
+  },
+  {
+    "source": "levels/pack4/LevelP2_103.lua",
+    "destination": "data/levels/pack4/LevelP2_103.lua"
+  },
+  {
+    "source": "levels/pack4/LevelP2_91.lua",
+    "destination": "data/levels/pack4/LevelP2_91.lua"
+  },
+  {
+    "source": "levels/pack4/LevelP2_65.lua",
+    "destination": "data/levels/pack4/LevelP2_65.lua"
+  },
+  {
+    "source": "levels/pack4/LevelP2_96.lua",
+    "destination": "data/levels/pack4/LevelP2_96.lua"
+  },
+  {
+    "source": "levels/pack4/LevelP2_69.lua",
+    "destination": "data/levels/pack4/LevelP2_69.lua"
+  },
+  {
+    "source": "levels/pack4/LevelP2_88.lua",
+    "destination": "data/levels/pack4/LevelP2_88.lua"
+  },
+  {
+    "source": "levels/pack4/LevelP2_64.lua",
+    "destination": "data/levels/pack4/LevelP2_64.lua"
+  },
+  {
+    "source": "levels/pack4/LevelP2_80.lua",
+    "destination": "data/levels/pack4/LevelP2_80.lua"
+  },
+  {
+    "source": "levels/pack4/LevelP2_108.lua",
+    "destination": "data/levels/pack4/LevelP2_108.lua"
+  },
+  {
+    "source": "levels/pack4/LevelP2_85.lua",
+    "destination": "data/levels/pack4/LevelP2_85.lua"
+  },
+  {
+    "source": "levels/pack4/LevelP2_82.lua",
+    "destination": "data/levels/pack4/LevelP2_82.lua"
+  },
+  {
+    "source": "levels/pack4/LevelP2_66.lua",
+    "destination": "data/levels/pack4/LevelP2_66.lua"
+  },
+  {
+    "source": "levels/pack4/LevelP2_104.lua",
+    "destination": "data/levels/pack4/LevelP2_104.lua"
+  },
+  {
+    "source": "levels/pack4/LevelP2_210.lua",
+    "destination": "data/levels/pack4/LevelP2_210.lua"
+  },
+  {
+    "source": "levels/pack4/LevelP2_83.lua",
+    "destination": "data/levels/pack4/LevelP2_83.lua"
+  },
+  {
+    "source": "levels/pack4/LevelP2_79.lua",
+    "destination": "data/levels/pack4/LevelP2_79.lua"
+  },
+  {
+    "source": "levels/pack4/LevelP2_77.lua",
+    "destination": "data/levels/pack4/LevelP2_77.lua"
+  },
+  {
+    "source": "levels/pack4/LevelP2_114.lua",
+    "destination": "data/levels/pack4/LevelP2_114.lua"
+  },
+  {
+    "source": "levels/pack4/LevelP2_81.lua",
+    "destination": "data/levels/pack4/LevelP2_81.lua"
+  },
+  {
+    "source": "levels/pack4/LevelP2_68.lua",
+    "destination": "data/levels/pack4/LevelP2_68.lua"
+  },
+  {
+    "source": "levels/pack4/LevelP2_95.lua",
+    "destination": "data/levels/pack4/LevelP2_95.lua"
+  },
+  {
+    "source": "levels/pack5/LevelP2_78.lua",
+    "destination": "data/levels/pack5/LevelP2_78.lua"
+  },
+  {
+    "source": "levels/pack5/LevelP2_100.lua",
+    "destination": "data/levels/pack5/LevelP2_100.lua"
+  },
+  {
+    "source": "levels/pack5/LevelP2_92.lua",
+    "destination": "data/levels/pack5/LevelP2_92.lua"
+  },
+  {
+    "source": "levels/pack5/LevelP2_94.lua",
+    "destination": "data/levels/pack5/LevelP2_94.lua"
+  },
+  {
+    "source": "levels/pack5/LevelP2_89.lua",
+    "destination": "data/levels/pack5/LevelP2_89.lua"
+  },
+  {
+    "source": "levels/pack5/LevelP2_73.lua",
+    "destination": "data/levels/pack5/LevelP2_73.lua"
+  },
+  {
+    "source": "levels/pack5/LevelP2_76.lua",
+    "destination": "data/levels/pack5/LevelP2_76.lua"
+  },
+  {
+    "source": "levels/pack5/LevelP2_122.lua",
+    "destination": "data/levels/pack5/LevelP2_122.lua"
+  },
+  {
+    "source": "levels/pack5/LevelP2_99.lua",
+    "destination": "data/levels/pack5/LevelP2_99.lua"
+  },
+  {
+    "source": "levels/pack5/LevelP2_84.lua",
+    "destination": "data/levels/pack5/LevelP2_84.lua"
+  },
+  {
+    "source": "levels/pack5/LevelP2_86.lua",
+    "destination": "data/levels/pack5/LevelP2_86.lua"
+  },
+  {
+    "source": "levels/pack5/LevelP2_74.lua",
+    "destination": "data/levels/pack5/LevelP2_74.lua"
+  },
+  {
+    "source": "levels/pack5/LevelP2_115.lua",
+    "destination": "data/levels/pack5/LevelP2_115.lua"
+  },
+  {
+    "source": "levels/pack5/LevelP2_98.lua",
+    "destination": "data/levels/pack5/LevelP2_98.lua"
+  },
+  {
+    "source": "levels/pack5/LevelP2_71.lua",
+    "destination": "data/levels/pack5/LevelP2_71.lua"
+  },
+  {
+    "source": "levels/pack5/LevelP2_72.lua",
+    "destination": "data/levels/pack5/LevelP2_72.lua"
+  },
+  {
+    "source": "levels/pack5/LevelP2_87.lua",
+    "destination": "data/levels/pack5/LevelP2_87.lua"
+  },
+  {
+    "source": "levels/pack5/LevelP2_93.lua",
+    "destination": "data/levels/pack5/LevelP2_93.lua"
+  },
+  {
+    "source": "levels/pack5/LevelP2_67.lua",
+    "destination": "data/levels/pack5/LevelP2_67.lua"
+  },
+  {
+    "source": "levels/pack5/LevelP2_97.lua",
+    "destination": "data/levels/pack5/LevelP2_97.lua"
+  },
+  {
+    "source": "levels/pack5/LevelP2_90.lua",
+    "destination": "data/levels/pack5/LevelP2_90.lua"
+  },
+  {
+    "source": "levels/pack6/LevelP3_212.lua",
+    "destination": "data/levels/pack6/LevelP3_212.lua"
+  },
+  {
+    "source": "levels/pack6/LevelP3_134.lua",
+    "destination": "data/levels/pack6/LevelP3_134.lua"
+  },
+  {
+    "source": "levels/pack6/LevelP3_162.lua",
+    "destination": "data/levels/pack6/LevelP3_162.lua"
+  },
+  {
+    "source": "levels/pack6/LevelP3_271.lua",
+    "destination": "data/levels/pack6/LevelP3_271.lua"
+  },
+  {
+    "source": "levels/pack6/LevelP3_224.lua",
+    "destination": "data/levels/pack6/LevelP3_224.lua"
+  },
+  {
+    "source": "levels/pack6/LevelP3_253.lua",
+    "destination": "data/levels/pack6/LevelP3_253.lua"
+  },
+  {
+    "source": "levels/pack6/LevelP3_225.lua",
+    "destination": "data/levels/pack6/LevelP3_225.lua"
+  },
+  {
+    "source": "levels/pack6/LevelP3_232.lua",
+    "destination": "data/levels/pack6/LevelP3_232.lua"
+  },
+  {
+    "source": "levels/pack6/LevelP3_150.lua",
+    "destination": "data/levels/pack6/LevelP3_150.lua"
+  },
+  {
+    "source": "levels/pack6/LevelP3_211.lua",
+    "destination": "data/levels/pack6/LevelP3_211.lua"
+  },
+  {
+    "source": "levels/pack6/LevelP3_223.lua",
+    "destination": "data/levels/pack6/LevelP3_223.lua"
+  },
+  {
+    "source": "levels/pack6/LevelP3_226.lua",
+    "destination": "data/levels/pack6/LevelP3_226.lua"
+  },
+  {
+    "source": "levels/pack6/LevelP3_215.lua",
+    "destination": "data/levels/pack6/LevelP3_215.lua"
+  },
+  {
+    "source": "levels/pack6/LevelP3_220.lua",
+    "destination": "data/levels/pack6/LevelP3_220.lua"
+  },
+  {
+    "source": "levels/pack6/LevelP3_231.lua",
+    "destination": "data/levels/pack6/LevelP3_231.lua"
+  },
+  {
+    "source": "levels/pack7/LevelP3_166.lua",
+    "destination": "data/levels/pack7/LevelP3_166.lua"
+  },
+  {
+    "source": "levels/pack7/LevelP3_237.lua",
+    "destination": "data/levels/pack7/LevelP3_237.lua"
+  },
+  {
+    "source": "levels/pack7/LevelP3_216.lua",
+    "destination": "data/levels/pack7/LevelP3_216.lua"
+  },
+  {
+    "source": "levels/pack7/LevelP3_298.lua",
+    "destination": "data/levels/pack7/LevelP3_298.lua"
+  },
+  {
+    "source": "levels/pack7/LevelP3_303.lua",
+    "destination": "data/levels/pack7/LevelP3_303.lua"
+  },
+  {
+    "source": "levels/pack7/LevelP3_214.lua",
+    "destination": "data/levels/pack7/LevelP3_214.lua"
+  },
+  {
+    "source": "levels/pack7/LevelP3_159.lua",
+    "destination": "data/levels/pack7/LevelP3_159.lua"
+  },
+  {
+    "source": "levels/pack7/LevelP3_164.lua",
+    "destination": "data/levels/pack7/LevelP3_164.lua"
+  },
+  {
+    "source": "levels/pack7/LevelP3_299.lua",
+    "destination": "data/levels/pack7/LevelP3_299.lua"
+  },
+  {
+    "source": "levels/pack7/LevelP3_302.lua",
+    "destination": "data/levels/pack7/LevelP3_302.lua"
+  },
+  {
+    "source": "levels/pack7/LevelP3_219.lua",
+    "destination": "data/levels/pack7/LevelP3_219.lua"
+  },
+  {
+    "source": "levels/pack7/LevelP3_163.lua",
+    "destination": "data/levels/pack7/LevelP3_163.lua"
+  },
+  {
+    "source": "levels/pack7/LevelP3_160.lua",
+    "destination": "data/levels/pack7/LevelP3_160.lua"
+  },
+  {
+    "source": "levels/pack7/LevelP3_161.lua",
+    "destination": "data/levels/pack7/LevelP3_161.lua"
+  },
+  {
+    "source": "levels/pack7/LevelP3_304.lua",
+    "destination": "data/levels/pack7/LevelP3_304.lua"
+  },
+  {
+    "source": "levels/pack8/LevelP3_297.lua",
+    "destination": "data/levels/pack8/LevelP3_297.lua"
+  },
+  {
+    "source": "levels/pack8/LevelP3_221.lua",
+    "destination": "data/levels/pack8/LevelP3_221.lua"
+  },
+  {
+    "source": "levels/pack8/LevelP3_306.lua",
+    "destination": "data/levels/pack8/LevelP3_306.lua"
+  },
+  {
+    "source": "levels/pack8/LevelP3_301.lua",
+    "destination": "data/levels/pack8/LevelP3_301.lua"
+  },
+  {
+    "source": "levels/pack8/LevelP3_312.lua",
+    "destination": "data/levels/pack8/LevelP3_312.lua"
+  },
+  {
+    "source": "levels/pack8/LevelP3_309.lua",
+    "destination": "data/levels/pack8/LevelP3_309.lua"
+  },
+  {
+    "source": "levels/pack8/LevelP3_168.lua",
+    "destination": "data/levels/pack8/LevelP3_168.lua"
+  },
+  {
+    "source": "levels/pack8/LevelP3_311.lua",
+    "destination": "data/levels/pack8/LevelP3_311.lua"
+  },
+  {
+    "source": "levels/pack8/LevelP3_308.lua",
+    "destination": "data/levels/pack8/LevelP3_308.lua"
+  },
+  {
+    "source": "levels/pack8/LevelP3_310.lua",
+    "destination": "data/levels/pack8/LevelP3_310.lua"
+  },
+  {
+    "source": "levels/pack8/LevelP3_217.lua",
+    "destination": "data/levels/pack8/LevelP3_217.lua"
+  },
+  {
+    "source": "levels/pack8/LevelP3_307.lua",
+    "destination": "data/levels/pack8/LevelP3_307.lua"
+  },
+  {
+    "source": "levels/pack8/LevelP3_296.lua",
+    "destination": "data/levels/pack8/LevelP3_296.lua"
+  },
+  {
+    "source": "levels/pack8/LevelP3_149.lua",
+    "destination": "data/levels/pack8/LevelP3_149.lua"
+  },
+  {
+    "source": "levels/pack8/LevelP3_313.lua",
+    "destination": "data/levels/pack8/LevelP3_313.lua"
+  },
+  {
+    "source": "levels/pack9/LevelP4_421.lua",
+    "destination": "data/levels/pack9/LevelP4_421.lua"
+  },
+  {
+    "source": "levels/pack9/LevelP4_423.lua",
+    "destination": "data/levels/pack9/LevelP4_423.lua"
+  },
+  {
+    "source": "levels/pack9/LevelP4_424.lua",
+    "destination": "data/levels/pack9/LevelP4_424.lua"
+  },
+  {
+    "source": "levels/pack9/LevelP4_425.lua",
+    "destination": "data/levels/pack9/LevelP4_425.lua"
+  },
+  {
+    "source": "levels/pack9/LevelP4_426.lua",
+    "destination": "data/levels/pack9/LevelP4_426.lua"
+  },
+  {
+    "source": "levels/pack9/LevelP4_427.lua",
+    "destination": "data/levels/pack9/LevelP4_427.lua"
+  },
+  {
+    "source": "levels/pack9/LevelP4_428.lua",
+    "destination": "data/levels/pack9/LevelP4_428.lua"
+  },
+  {
+    "source": "levels/pack9/LevelP4_429.lua",
+    "destination": "data/levels/pack9/LevelP4_429.lua"
+  },
+  {
+    "source": "levels/pack9/LevelP4_431.lua",
+    "destination": "data/levels/pack9/LevelP4_431.lua"
+  },
+  {
+    "source": "levels/pack9/LevelP4_432.lua",
+    "destination": "data/levels/pack9/LevelP4_432.lua"
+  },
+  {
+    "source": "levels/pack9/LevelP4_433.lua",
+    "destination": "data/levels/pack9/LevelP4_433.lua"
+  },
+  {
+    "source": "levels/pack9/LevelP4_436.lua",
+    "destination": "data/levels/pack9/LevelP4_436.lua"
+  },
+  {
+    "source": "levels/pack9/LevelP4_439.lua",
+    "destination": "data/levels/pack9/LevelP4_439.lua"
+  },
+  {
+    "source": "levels/pack9/LevelP4_440.lua",
+    "destination": "data/levels/pack9/LevelP4_440.lua"
+  },
+  {
+    "source": "levels/pack9/LevelP4_441.lua",
+    "destination": "data/levels/pack9/LevelP4_441.lua"
+  },
+  {
+    "source": "levels/pack10/LevelP4_442.lua",
+    "destination": "data/levels/pack10/LevelP4_442.lua"
+  },
+  {
+    "source": "levels/pack10/LevelP4_443.lua",
+    "destination": "data/levels/pack10/LevelP4_443.lua"
+  },
+  {
+    "source": "levels/pack10/LevelP4_444.lua",
+    "destination": "data/levels/pack10/LevelP4_444.lua"
+  },
+  {
+    "source": "levels/pack10/LevelP4_445.lua",
+    "destination": "data/levels/pack10/LevelP4_445.lua"
+  },
+  {
+    "source": "levels/pack10/LevelP4_448.lua",
+    "destination": "data/levels/pack10/LevelP4_448.lua"
+  },
+  {
+    "source": "levels/pack10/LevelP4_449.lua",
+    "destination": "data/levels/pack10/LevelP4_449.lua"
+  },
+  {
+    "source": "levels/pack10/LevelP4_451.lua",
+    "destination": "data/levels/pack10/LevelP4_451.lua"
+  },
+  {
+    "source": "levels/pack10/LevelP4_452.lua",
+    "destination": "data/levels/pack10/LevelP4_452.lua"
+  },
+  {
+    "source": "levels/pack10/LevelP4_453.lua",
+    "destination": "data/levels/pack10/LevelP4_453.lua"
+  },
+  {
+    "source": "levels/pack10/LevelP4_454.lua",
+    "destination": "data/levels/pack10/LevelP4_454.lua"
+  },
+  {
+    "source": "levels/pack10/LevelP4_455.lua",
+    "destination": "data/levels/pack10/LevelP4_455.lua"
+  },
+  {
+    "source": "levels/pack10/LevelP4_457.lua",
+    "destination": "data/levels/pack10/LevelP4_457.lua"
+  },
+  {
+    "source": "levels/pack10/LevelP4_458.lua",
+    "destination": "data/levels/pack10/LevelP4_458.lua"
+  },
+  {
+    "source": "levels/pack10/LevelP4_459.lua",
+    "destination": "data/levels/pack10/LevelP4_459.lua"
+  },
+  {
+    "source": "levels/pack10/LevelP4_462.lua",
+    "destination": "data/levels/pack10/LevelP4_462.lua"
+  },
+  {
+    "source": "levels/pack11/LevelP4_463.lua",
+    "destination": "data/levels/pack11/LevelP4_463.lua"
+  },
+  {
+    "source": "levels/pack11/LevelP4_464.lua",
+    "destination": "data/levels/pack11/LevelP4_464.lua"
+  },
+  {
+    "source": "levels/pack11/LevelP4_465.lua",
+    "destination": "data/levels/pack11/LevelP4_465.lua"
+  },
+  {
+    "source": "levels/pack11/LevelP4_466.lua",
+    "destination": "data/levels/pack11/LevelP4_466.lua"
+  },
+  {
+    "source": "levels/pack11/LevelP4_467.lua",
+    "destination": "data/levels/pack11/LevelP4_467.lua"
+  },
+  {
+    "source": "levels/pack11/LevelP4_468.lua",
+    "destination": "data/levels/pack11/LevelP4_468.lua"
+  },
+  {
+    "source": "levels/pack11/LevelP4_469.lua",
+    "destination": "data/levels/pack11/LevelP4_469.lua"
+  },
+  {
+    "source": "levels/pack11/LevelP4_470.lua",
+    "destination": "data/levels/pack11/LevelP4_470.lua"
+  },
+  {
+    "source": "levels/pack11/LevelP4_471.lua",
+    "destination": "data/levels/pack11/LevelP4_471.lua"
+  },
+  {
+    "source": "levels/pack11/LevelP4_472.lua",
+    "destination": "data/levels/pack11/LevelP4_472.lua"
+  },
+  {
+    "source": "levels/pack11/LevelP4_473.lua",
+    "destination": "data/levels/pack11/LevelP4_473.lua"
+  },
+  {
+    "source": "levels/pack11/LevelP4_474.lua",
+    "destination": "data/levels/pack11/LevelP4_474.lua"
+  },
+  {
+    "source": "levels/pack11/LevelP4_475.lua",
+    "destination": "data/levels/pack11/LevelP4_475.lua"
+  },
+  {
+    "source": "levels/pack11/LevelP4_477.lua",
+    "destination": "data/levels/pack11/LevelP4_477.lua"
+  },
+  {
+    "source": "levels/pack11/LevelP4_478.lua",
+    "destination": "data/levels/pack11/LevelP4_478.lua"
+  },
+  {
+    "source": "levels/goldeneggs1/LevelGE_1.lua",
+    "destination": "data/levels/goldeneggs1/LevelGE_1.lua"
+  },
+  {
+    "source": "levels/goldeneggs1/LevelGE_2.lua",
+    "destination": "data/levels/goldeneggs1/LevelGE_2.lua"
+  },
+  {
+    "source": "levels/goldeneggs1/LevelGE_3.lua",
+    "destination": "data/levels/goldeneggs1/LevelGE_3.lua"
+  },
+  {
+    "source": "levels/goldeneggs1/LevelGE_4.lua",
+    "destination": "data/levels/goldeneggs1/LevelGE_4.lua"
+  },
+  {
+    "source": "levels/goldeneggs1/LevelGE_5.lua",
+    "destination": "data/levels/goldeneggs1/LevelGE_5.lua"
+  },
+  {
+    "source": "levels/goldeneggs1/LevelGE_6.lua",
+    "destination": "data/levels/goldeneggs1/LevelGE_6.lua"
+  },
+  {
+    "source": "levels/goldeneggs1/LevelGE_7.lua",
+    "destination": "data/levels/goldeneggs1/LevelGE_7.lua"
+  },
+  {
+    "source": "levels/goldeneggs1/LevelGE_8.lua",
+    "destination": "data/levels/goldeneggs1/LevelGE_8.lua"
+  },
+  {
+    "source": "levels/goldeneggs1/LevelGE_9.lua",
+    "destination": "data/levels/goldeneggs1/LevelGE_9.lua"
+  },
+  {
+    "source": "levels/goldeneggs1/LevelGE_10.lua",
+    "destination": "data/levels/goldeneggs1/LevelGE_10.lua"
+  },
+  {
+    "source": "levels/goldeneggs1/LevelGE_11.lua",
+    "destination": "data/levels/goldeneggs1/LevelGE_11.lua"
+  },
+  {
+    "source": "levels/goldeneggs1/LevelGE_12.lua",
+    "destination": "data/levels/goldeneggs1/LevelGE_12.lua"
+  },
+  {
+    "source": "levels/goldeneggs1/LevelGE_13.lua",
+    "destination": "data/levels/goldeneggs1/LevelGE_13.lua"
+  },
+  {
+    "source": "levels/goldeneggs1/LevelGE_14.lua",
+    "destination": "data/levels/goldeneggs1/LevelGE_14.lua"
+  },
+  {
+    "source": "levels/goldeneggs1/LevelGE_15.lua",
+    "destination": "data/levels/goldeneggs1/LevelGE_15.lua"
+  }
+]

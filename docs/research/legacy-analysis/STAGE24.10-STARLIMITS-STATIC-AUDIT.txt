@@ -1,0 +1,11 @@
+Stage 24.10 starLimits namespace static audit
+source: user's local Angry Birds Classic 1.4.2 starLimits.lua (not redistributed in bootstrap ZIP)
+Lua chunk: 1467 root instructions, 376 constants, 0 child protos, maxstack=2
+root opcodes: NEWTABLE=244 SETTABLE=703 SETGLOBAL=244 LOADK=275 RETURN=1
+recovered table entries: 244
+Level1: silverScore=30000 goldScore=32000 eagleScore=17000
+result: PASS
+
+Interpretation: when the same original chunk is executed with a fresh Lua 5.1 function environment,
+its 244 top-level SETGLOBAL operations populate that environment. Installing that environment as
+starTable reproduces the non-empty GameLua::loadLuaFile(path, tableName) mechanism recovered from ARMv7.

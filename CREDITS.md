@@ -74,7 +74,7 @@ Where the build requires original game data, that data is discovered or staged *
 The reconstruction also depends on or incorporates third-party software with its own authorship and license terms, including:
 
 - **KA3D / Pixelgene historical compatibility** - the KA3D source tree is not redistributed in this repository. Some compatibility behavior was reconstructed after analysis of historical KA3D code and the original ARMv7 runtime; KA3D remains third-party software under its original upstream license terms;
-- **Lua 5.1.5** — obtained by the build tooling from the official Lua distribution and used with compatibility changes required by the historical game chunk ABI;
+- **Lua 5.1.5** - vendored under `vendor/lua-5.1.5/` and used with compatibility changes required by the historical game chunk ABI;
 - **Box2D 2.1.2 family** — the build pins a period-appropriate Box2D source baseline and applies evidence-driven compatibility changes where required by the shipped game behavior;
 - Android/NDK, OpenGL ES, and other platform components under their respective terms.
 

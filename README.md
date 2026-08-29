@@ -3,13 +3,43 @@
 A source reconstruction of **Angry Birds 1.4.2 for Android**, targeting modern
 **64-bit ARM (AArch64 / arm64-v8a)** devices.
 
-The original Android release was built around a 32-bit ARM native runtime.
-This project reconstructs the native side for ARM64 while preserving the
-original game's Lua-driven behavior and using original game data supplied
-locally by the builder.
+The original Android release shipped with a 32-bit ARMv7 native runtime.
+Rather than porting an available Rovio source tree, this project reconstructs
+the native behavior needed by the shipped game and rebuilds that runtime for
+AArch64.
+
+The result is a native ARM64 build of the classic Android game: its original
+Lua logic and locally supplied game data run on a reconstructed modern Android
+runtime instead of the original ARMv7 binary.
 
 > This is an independent preservation and compatibility project. It is not
 > affiliated with, sponsored by, or endorsed by Rovio Entertainment.
+
+## Why this project is unusual
+
+This is not a simple rebuild of an existing Android source port.
+
+The original game-side native runtime was shipped as an **ARMv7 binary**.
+Reconstruction work therefore involved analyzing the behavior and interfaces
+of that runtime, the game's Lua code and data contracts, and then reproducing
+the native services required by the game on **AArch64**.
+
+In particular:
+
+- the final runtime is compiled as native `arm64-v8a` code;
+- it does not require the original ARMv7 native library at runtime;
+- the public build does not link against or redistribute the historical
+  KA3D source tree;
+- required KA3D-era compatibility behavior is implemented separately in the
+  reconstructed runtime;
+- original proprietary game assets remain outside this repository and are
+  supplied locally by the builder;
+- rendering, physics bridges, input, audio, persistence, progression, menus,
+  Android lifecycle behavior, and other native-facing systems were
+  reconstructed around the original game's existing Lua logic.
+
+The goal is behavioral compatibility with the classic release, not a redesign
+or a modern remake.
 
 ## What this repository contains
 
@@ -120,9 +150,46 @@ Where possible, compatibility decisions are based on observable behavior,
 original ARMv7 runtime analysis, game-side Lua behavior, controlled comparison,
 and repeatable audit tooling.
 
+### AI-assisted development
+
+Development was **heavily AI-assisted**, primarily using ChatGPT for
+reverse-engineering analysis, code reconstruction, debugging, test and audit
+tooling, and documentation, under maintainer direction and hands-on validation
+on real hardware.
+
+AI-generated or AI-suggested changes were treated as engineering hypotheses
+rather than authoritative output. Relevant changes were compiled, inspected,
+compared against observed behavior of the historical runtime, exercised through
+repeatable audits or regression checks where practical, and validated on target
+Android hardware.
+
+Project leadership, technical direction, acceptance decisions, device testing,
+release decisions, and final validation remained with the maintainer.
+
+See `CREDITS.md` for the full development attribution.
+
 The current public runtime does not link against or redistribute the historical
 KA3D source tree. See `CREDITS.md` and `THIRD_PARTY_NOTICES.md` for provenance
 details.
+
+## Known limitations
+
+This is a reconstruction, not the original Rovio source code.
+
+Current limitations and caveats include:
+
+- a builder must provide their own compatible original Angry Birds 1.4.2 game
+  data;
+- this repository intentionally does not ship a ready-to-play APK containing
+  Rovio's proprietary assets;
+- exact floating-point, physics, rendering, or platform behavior can still
+  differ in edge cases between the historical ARMv7 runtime and modern ARM64;
+- the current toolchain and release path have received the most validation on
+  Windows and modern Android ARM64 hardware;
+- historical Stage0-Stage23 material is preserved for research and provenance
+  but is not part of the active production build.
+
+Known fidelity work is tracked in `ROADMAP.md`.
 
 ## Licensing and third-party software
 

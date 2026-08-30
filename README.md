@@ -12,6 +12,8 @@ The result is a native ARM64 build of the classic Android game: its original
 Lua logic and locally supplied game data run on a reconstructed modern Android
 runtime instead of the original ARMv7 binary.
 
+![Angry Birds ARM64 gameplay](docs/media/angry-birds-arm64-gameplay.gif)
+
 > This is an independent preservation and compatibility project. It is not
 > affiliated with, sponsored by, or endorsed by Rovio Entertainment.
 
@@ -40,6 +42,8 @@ In particular:
 
 The goal is behavioral compatibility with the classic release, not a redesign
 or a modern remake.
+
+![Angry Birds ARM64 reconstruction credits](docs/media/angry-birds-arm64-credits.gif)
 
 ## What this repository contains
 
@@ -184,8 +188,10 @@ Current limitations and caveats include:
   Rovio's proprietary assets;
 - exact floating-point, physics, rendering, or platform behavior can still
   differ in edge cases between the historical ARMv7 runtime and modern ARM64;
-- the current toolchain and release path have received the most validation on
-  Windows and modern Android ARM64 hardware;
+- the build and packaging path has been validated on Windows and end-to-end
+  from a clean public clone on Ubuntu 24.04 x86_64, including native AArch64
+  compilation, asset staging, APK packaging/signing/audit, and installation on
+  modern ARM64 Android hardware;
 - historical Stage0-Stage23 material is preserved for research and provenance
   but is not part of the active production build.
 

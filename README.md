@@ -195,7 +195,9 @@ Current limitations and caveats include:
 - historical Stage0-Stage23 material is preserved for research and provenance
   but is not part of the active production build.
 
-Known fidelity work is tracked in `ROADMAP.md`.
+Known fidelity work is tracked in `ROADMAP.md`. For subsystem-level confidence,
+evidence, and remaining validation targets, see `FIDELITY.md`. Contribution and
+fidelity-reporting guidance is in `CONTRIBUTING.md`.
 
 ## Licensing and third-party software
 

@@ -2,11 +2,44 @@
 
 project(angry_birds_arm64 LANGUAGES C CXX)
 
+option(
+    ANGRY_BUILD_HOST_TESTS
+    "Build host-only runtime contract tests"
+    OFF
+)
+
 if(NOT ANDROID)
-    message(FATAL_ERROR
-        "The primary target is an Android ARM64 NativeActivity library. "
-        "Configure this project with the Android NDK toolchain."
+    if(NOT ANGRY_BUILD_HOST_TESTS)
+        message(FATAL_ERROR
+            "The primary target is an Android ARM64 NativeActivity library. "
+            "Configure with the Android NDK toolchain, or set "
+            "ANGRY_BUILD_HOST_TESTS=ON for host-only runtime tests."
+        )
+    endif()
+
+    enable_testing()
+
+    add_executable(presentation_geometry_tests
+        tests/presentation_geometry_test.cpp
+        src/runtime/presentation/presentation_geometry.cpp
     )
+
+    target_include_directories(presentation_geometry_tests
+        PRIVATE
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/runtime/presentation"
+    )
+
+    target_compile_features(presentation_geometry_tests
+        PRIVATE
+            cxx_std_17
+    )
+
+    add_test(
+        NAME presentation_geometry
+        COMMAND presentation_geometry_tests
+    )
+
+    return()
 endif()
 
 # ---------------------------------------------------------------------------
@@ -178,6 +211,7 @@ endif()
 
 add_library(stage24_live_surface SHARED
     stage24_live_surface.cpp
+    src/runtime/presentation/presentation_geometry.cpp
     "${STAGE24_NATIVE_APP_GLUE}/android_native_app_glue.c"
 )
 

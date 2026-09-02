@@ -5,6 +5,30 @@ on:
   pull_request:
 
 jobs:
+  host-contracts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install host build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build
+
+      - name: Configure runtime contract tests
+        run: |
+          cmake -S . -B build/host-tests \
+            -G Ninja \
+            -DANGRY_BUILD_HOST_TESTS=ON
+
+      - name: Build runtime contract tests
+        run: cmake --build build/host-tests
+
+      - name: Run runtime contract tests
+        run: ctest --test-dir build/host-tests --output-on-failure
+
   native-arm64:
     runs-on: ubuntu-latest
 

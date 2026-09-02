@@ -178,6 +178,7 @@ endif()
 
 add_library(stage24_live_surface SHARED
     stage24_live_surface.cpp
+    src/runtime/presentation/presentation_geometry.cpp
     "${STAGE24_NATIVE_APP_GLUE}/android_native_app_glue.c"
 )
 

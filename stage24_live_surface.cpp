@@ -1,3 +1,4 @@
+#include "src/runtime/presentation/presentation_geometry.h"
 #include <EGL/egl.h>
 #include <GLES/gl.h>
 #include <SLES/OpenSLES.h>
@@ -142,10 +143,14 @@ static constexpr int gStage24201DebugLogicalW = STAGE24_DEBUG_LOGICAL_W;
 static constexpr int gStage24201DebugLogicalH = STAGE24_DEBUG_LOGICAL_H;
 
 static int stage24201_effective_logical_w(int surfaceW) {
-    return gStage24201DebugDisplay ? gStage24201DebugLogicalW : std::max(1, surfaceW);
+    return angry::runtime::presentation::effective_logical_extent(
+        surfaceW,
+        gStage24201DebugDisplay ? gStage24201DebugLogicalW : 0);
 }
 static int stage24201_effective_logical_h(int surfaceH) {
-    return gStage24201DebugDisplay ? gStage24201DebugLogicalH : std::max(1, surfaceH);
+    return angry::runtime::presentation::effective_logical_extent(
+        surfaceH,
+        gStage24201DebugDisplay ? gStage24201DebugLogicalH : 0);
 }
 
 static void stage24133_resolve_menu_canvas_from_window() {

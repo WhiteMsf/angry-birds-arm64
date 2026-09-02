@@ -16629,31 +16629,30 @@ public:
         // Stage 24.20.1: Native remains the recovered contract.  The optional
         // debug harness gives Lua/camera/touch a real 854x480 logical Context
         // and letterboxes that Context into the physical modern Surface.
-        logicalW = stage24201_effective_logical_w(surfaceW);
-        logicalH = stage24201_effective_logical_h(surfaceH);
+        // Stage 24.31.4f presentation policy now lives in the reusable
+        // runtime presentation layer. EGL owns the physical surface; the
+        // presentation module owns only deterministic geometry resolution.
+        const auto geometry =
+            angry::runtime::presentation::resolve_geometry(
+                surfaceW,
+                surfaceH,
+                gStage24201DebugLogicalW,
+                gStage24201DebugLogicalH);
+
+        logicalW = geometry.logical_width;
+        logicalH = geometry.logical_height;
+
+        viewportX = geometry.raster.x;
+        viewportY = geometry.raster.y;
+        viewportW = geometry.raster.width;
+        viewportH = geometry.raster.height;
+
+        presentationViewportX = geometry.output.x;
+        presentationViewportY = geometry.output.y;
+        presentationViewportW = geometry.output.width;
+        presentationViewportH = geometry.output.height;
+
         if (gStage24201DebugDisplay) {
-            // Stage 24.31.4f: preserve the recovered ARMv7 raster contract
-            // internally.  The legacy renderer always receives an exactly
-            // logical-sized framebuffer region (1 logical pixel = 1 raster
-            // pixel).  A separate presentation pass copies the already
-            // composited 854x480 frame and scales that single image to the
-            // modern Android Surface.  No legacy sprite is individually
-            // magnified before atlas sampling.
-            viewportW = std::min(logicalW, surfaceW);
-            viewportH = std::min(logicalH, surfaceH);
-            viewportX = (surfaceW - viewportW) / 2;
-            viewportY = (surfaceH - viewportH) / 2;
-
-            const double presentScale = std::min(
-                static_cast<double>(surfaceW) / static_cast<double>(std::max(1, logicalW)),
-                static_cast<double>(surfaceH) / static_cast<double>(std::max(1, logicalH)));
-            presentationViewportW = std::max(
-                1, std::min(surfaceW, static_cast<int>(std::lround(logicalW * presentScale))));
-            presentationViewportH = std::max(
-                1, std::min(surfaceH, static_cast<int>(std::lround(logicalH * presentScale))));
-            presentationViewportX = (surfaceW - presentationViewportW) / 2;
-            presentationViewportY = (surfaceH - presentationViewportH) / 2;
-
             std::printf(
                 "[stage24.31.4f-presentation] RASTER_INIT surface=%dx%d logical=%dx%d "
                 "rasterViewport=%d,%d,%dx%d rasterScale=(%.6f,%.6f) "
@@ -16667,15 +16666,6 @@ public:
                 presentationViewportW, presentationViewportH,
                 logicalW > 0 ? static_cast<double>(presentationViewportW) / static_cast<double>(logicalW) : 0.0,
                 logicalH > 0 ? static_cast<double>(presentationViewportH) / static_cast<double>(logicalH) : 0.0);
-        } else {
-            viewportX = 0;
-            viewportY = 0;
-            viewportW = surfaceW;
-            viewportH = surfaceH;
-            presentationViewportX = viewportX;
-            presentationViewportY = viewportY;
-            presentationViewportW = viewportW;
-            presentationViewportH = viewportH;
         }
         menuLogicalW = logicalW;
         menuLogicalH = logicalH;
@@ -16954,33 +16944,25 @@ public:
         eglQuerySurface(display, surface, EGL_HEIGHT, &sh);
         surfaceW = sw > 0 ? sw : W;
         surfaceH = sh > 0 ? sh : H;
-        logicalW = stage24201_effective_logical_w(surfaceW);
-        logicalH = stage24201_effective_logical_h(surfaceH);
+        const auto geometry =
+            angry::runtime::presentation::resolve_geometry(
+                surfaceW,
+                surfaceH,
+                gStage24201DebugLogicalW,
+                gStage24201DebugLogicalH);
 
-        if (gStage24201DebugDisplay) {
-            viewportW = std::min(logicalW, surfaceW);
-            viewportH = std::min(logicalH, surfaceH);
-            viewportX = (surfaceW - viewportW) / 2;
-            viewportY = (surfaceH - viewportH) / 2;
-            const double presentScale = std::min(
-                static_cast<double>(surfaceW) / static_cast<double>(std::max(1, logicalW)),
-                static_cast<double>(surfaceH) / static_cast<double>(std::max(1, logicalH)));
-            presentationViewportW = std::max(
-                1, std::min(surfaceW, static_cast<int>(std::lround(logicalW * presentScale))));
-            presentationViewportH = std::max(
-                1, std::min(surfaceH, static_cast<int>(std::lround(logicalH * presentScale))));
-            presentationViewportX = (surfaceW - presentationViewportW) / 2;
-            presentationViewportY = (surfaceH - presentationViewportH) / 2;
-        } else {
-            viewportX = 0;
-            viewportY = 0;
-            viewportW = surfaceW;
-            viewportH = surfaceH;
-            presentationViewportX = viewportX;
-            presentationViewportY = viewportY;
-            presentationViewportW = viewportW;
-            presentationViewportH = viewportH;
-        }
+        logicalW = geometry.logical_width;
+        logicalH = geometry.logical_height;
+
+        viewportX = geometry.raster.x;
+        viewportY = geometry.raster.y;
+        viewportW = geometry.raster.width;
+        viewportH = geometry.raster.height;
+
+        presentationViewportX = geometry.output.x;
+        presentationViewportY = geometry.output.y;
+        presentationViewportW = geometry.output.width;
+        presentationViewportH = geometry.output.height;
         menuLogicalW = logicalW;
         menuLogicalH = logicalH;
         menuViewportX = viewportX;

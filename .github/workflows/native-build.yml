@@ -29,6 +29,11 @@ jobs:
       - name: Run runtime contract tests
         run: ctest --test-dir build/host-tests --output-on-failure
 
+      - name: Check Windows builder contracts
+        run: |
+          python3 -m py_compile build.py tools/windows_builder.py tools/windows_builder_core.py
+          python3 tools/test_windows_builder_core.py -v
+
   native-arm64:
     runs-on: ubuntu-latest
 
@@ -66,3 +71,52 @@ jobs:
 
       - name: Check repository diff
         run: git diff --check
+
+      - name: Upload ARM64 runtime for Windows builder
+        uses: actions/upload-artifact@v4
+        with:
+          name: arm64-runtime
+          path: build/android-arm64/libangryarm64.so
+          if-no-files-found: error
+          retention-days: 7
+
+  windows-builder:
+    runs-on: windows-latest
+    needs: [host-contracts, native-arm64]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Download ARM64 runtime
+        uses: actions/download-artifact@v4
+        with:
+          name: arm64-runtime
+          path: builder-runtime
+
+      - name: Check builder contracts
+        run: |
+          python -m py_compile build.py tools/windows_builder.py tools/windows_builder_core.py
+          python tools/test_windows_builder_core.py -v
+
+      - name: Install pinned Windows packager
+        run: python -m pip install --disable-pip-version-check pyinstaller==6.22.3
+
+      - name: Package Windows builder preview
+        run: >-
+          python tools/package_windows_builder.py
+          --native-library builder-runtime/libangryarm64.so
+          --output dist/windows-builder-preview
+
+      - name: Upload Windows builder preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-builder-preview
+          path: dist/windows-builder-preview/*
+          if-no-files-found: error
+          retention-days: 7

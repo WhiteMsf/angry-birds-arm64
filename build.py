@@ -130,8 +130,23 @@ def fail(message: str) -> "NoReturn":
     raise BuildError(message)
 
 
+def resolve_build_root(args: argparse.Namespace) -> Path:
+    configured = getattr(args, "build_root", None)
+    return Path(configured).expanduser().resolve() if configured else ROOT / "build"
+
+
 def run(cmd: list[str], *, cwd: Path | None = None) -> None:
-    printable = " ".join(str(x) for x in cmd)
+    secret_next = False
+    printable_parts: list[str] = []
+    for value in cmd:
+        rendered = str(value)
+        if secret_next:
+            rendered = "<redacted>"
+            secret_next = False
+        printable_parts.append(rendered)
+        if rendered in {"-storepass", "-keypass", "--ks-pass", "--key-pass"}:
+            secret_next = True
+    printable = " ".join(printable_parts)
     print(f"[build] $ {printable}")
 
     result = subprocess.run(
@@ -329,7 +344,12 @@ def numeric_version_key(name: str) -> tuple[int, ...]:
     return tuple(int(x) for x in nums) if nums else (0,)
 
 
-def discover_android_packaging_tools(sdk: Path) -> dict[str, Path]:
+def discover_android_packaging_tools(
+    sdk: Path,
+    *,
+    build_tools_version: str | None = None,
+    platform_api: int | None = None,
+) -> dict[str, Path]:
     build_tools_root = sdk / "build-tools"
 
     if not build_tools_root.is_dir():
@@ -340,6 +360,8 @@ def discover_android_packaging_tools(sdk: Path) -> dict[str, Path]:
         key=lambda p: numeric_version_key(p.name),
         reverse=True,
     )
+    if build_tools_version:
+        directories = [p for p in directories if p.name == build_tools_version]
 
     if platform.system() == "Windows":
         tool_names = {
@@ -386,6 +408,8 @@ def discover_android_packaging_tools(sdk: Path) -> dict[str, Path]:
         key=lambda p: int(p.name.split("-", 1)[1]),
         reverse=True,
     )
+    if platform_api is not None:
+        platforms = [p for p in platforms if p.name == f"android-{platform_api}"]
 
     if not platforms:
         fail(f"No usable Android platform found in {platforms_root}")
@@ -400,13 +424,15 @@ def external_command(executable: Path, *args: str) -> list[str]:
         platform.system() == "Windows"
         and executable.suffix.casefold() in {".bat", ".cmd"}
     ):
-        return [
-            "cmd.exe",
-            "/d",
-            "/c",
-            str(executable),
-            *map(str, args),
-        ]
+        if executable.name.casefold() == "apksigner.bat":
+            java = shutil.which("java")
+            jar = executable.parent / "lib" / "apksigner.jar"
+            if java and jar.is_file():
+                return [java, "-jar", str(jar), *map(str, args)]
+        command = subprocess.list2cmdline(
+            [str(executable), *map(str, args)]
+        )
+        return ["cmd.exe", "/d", "/s", "/c", f'"{command}"']
 
     return [
         str(executable),
@@ -540,7 +566,13 @@ def prepare_launcher_icon(
         )
 
 
-def ensure_debug_keystore(path: Path) -> None:
+def ensure_debug_keystore(
+    path: Path,
+    *,
+    password: str = "android",
+    password_file: Path | None = None,
+    alias: str = "androiddebugkey",
+) -> None:
     if path.is_file():
         return
 
@@ -550,6 +582,11 @@ def ensure_debug_keystore(path: Path) -> None:
 
     print(f"[package] Creating persistent debug keystore: {path}")
 
+    password_options = (
+        ["-storepass:file", str(password_file), "-keypass:file", str(password_file)]
+        if password_file
+        else ["-storepass", password, "-keypass", password]
+    )
     run(
         [
             str(keytool),
@@ -557,12 +594,9 @@ def ensure_debug_keystore(path: Path) -> None:
             "-noprompt",
             "-keystore",
             str(path),
-            "-storepass",
-            "android",
-            "-keypass",
-            "android",
+            *password_options,
             "-alias",
-            "androiddebugkey",
+            alias,
             "-dname",
             "CN=Android Debug,O=Android,C=US",
             "-keyalg",
@@ -578,13 +612,22 @@ def ensure_debug_keystore(path: Path) -> None:
 
 
 def package_debug_apk(args: argparse.Namespace) -> None:
-    env = resolve_environment(args)
-    tools = discover_android_packaging_tools(env["sdk"])
+    sdk = discover_android_sdk(getattr(args, "android_sdk", None))
+    tools = discover_android_packaging_tools(
+        sdk,
+        build_tools_version=getattr(args, "build_tools_version", None),
+        platform_api=getattr(args, "platform_api", None),
+    )
 
     original_root = discover_original_root(args.original_root)
+    build_root = resolve_build_root(args)
 
-    native_so = ROOT / "build" / "android-arm64" / "libangryarm64.so"
-    assets_root = ROOT / "build" / "staging" / "assets"
+    native_so = (
+        Path(args.native_library).expanduser().resolve()
+        if getattr(args, "native_library", None)
+        else build_root / "android-arm64" / "libangryarm64.so"
+    )
+    assets_root = build_root / "staging" / "assets"
 
     if not native_so.is_file():
         fail(f"native library missing: {native_so}")
@@ -592,7 +635,7 @@ def package_debug_apk(args: argparse.Namespace) -> None:
     if not assets_root.is_dir():
         fail(f"staged assets missing: {assets_root}")
 
-    package_root = ROOT / "build" / "apk"
+    package_root = build_root / "apk"
 
     if package_root.exists():
         shutil.rmtree(package_root)
@@ -631,32 +674,49 @@ def package_debug_apk(args: argparse.Namespace) -> None:
     signed = package_root / "angry-birds-arm64-audit.apk"
 
     debug_keystore = (
-        Path.home()
-        / ".android"
-        / "angry-arm64-stage24-debug.keystore"
+        Path(args.keystore).expanduser().resolve()
+        if getattr(args, "keystore", None)
+        else Path.home() / ".android" / "angry-arm64-stage24-debug.keystore"
     )
+    keystore_alias = getattr(args, "keystore_alias", None) or "androiddebugkey"
+    password_file = getattr(args, "keystore_password_file", None)
+    keystore_password = "android"
+    if password_file:
+        password_file = Path(password_file).expanduser().resolve()
+        if not password_file.is_file():
+            fail(f"keystore password file missing: {password_file}")
+        keystore_password = password_file.read_text(encoding="utf-8").strip()
+        if not keystore_password:
+            fail("keystore password file is empty")
 
-    ensure_debug_keystore(debug_keystore)
+    ensure_debug_keystore(
+        debug_keystore,
+        password=keystore_password,
+        password_file=password_file,
+        alias=keystore_alias,
+    )
 
     bridges = AsciiPathBridges()
 
     try:
         project_bridge = bridges.bridge_root(ROOT)
-        sdk_bridge = bridges.bridge_root(env["sdk"])
+        build_bridge = bridges.bridge_root(build_root)
+        sdk_bridge = bridges.bridge_root(sdk)
         key_root = debug_keystore.parent.resolve()
         key_bridge = bridges.bridge_root(key_root)
 
         def project_path(path: Path) -> Path:
-            return bridges.convert(
-                path,
-                ROOT,
-                project_bridge,
-            )
+            path = path.resolve()
+            try:
+                path.relative_to(ROOT)
+            except ValueError:
+                return bridges.convert(path, build_root, build_bridge)
+            return bridges.convert(path, ROOT, project_bridge)
 
         def sdk_path(path: Path) -> Path:
             return bridges.convert(
                 path,
-                env["sdk"],
+                sdk,
                 sdk_bridge,
             )
 
@@ -767,23 +827,33 @@ def package_debug_apk(args: argparse.Namespace) -> None:
             )
         )
 
-        run(
-            external_command(
-                apksigner,
-                "sign",
-                "--ks",
-                str(key_path(debug_keystore)),
-                "--ks-pass",
-                "pass:android",
-                "--key-pass",
-                "pass:android",
-                "--ks-key-alias",
-                "androiddebugkey",
+        signing_args = [
+            "sign",
+            "--ks",
+            str(key_path(debug_keystore)),
+            "--ks-key-alias",
+            keystore_alias,
+        ]
+        if password_file:
+            password_bridge = bridges.bridge_root(password_file.parent)
+            signing_args.extend(
+                [
+                    "--ks-pass",
+                    "file:" + str(bridges.convert(password_file, password_file.parent, password_bridge)),
+                ]
+            )
+        else:
+            signing_args.extend(
+                ["--ks-pass", "pass:android", "--key-pass", "pass:android"]
+            )
+        signing_args.extend(
+            [
                 "--out",
                 str(project_path(signed)),
                 str(project_path(aligned)),
-            )
+            ]
         )
+        run(external_command(apksigner, *signing_args))
 
         print()
         print("[verify] APK signature...")
@@ -848,7 +918,16 @@ def package_debug_apk(args: argparse.Namespace) -> None:
 
     print()
     print("[package] PASS")
-    print(f"[package] APK ready: {signed}")
+    output_apk = getattr(args, "output_apk", None)
+    if output_apk:
+        output_apk = Path(output_apk).expanduser().resolve()
+        if output_apk.exists():
+            fail(f"output APK already exists; choose a new path: {output_apk}")
+        output_apk.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(signed, output_apk)
+        print(f"[package] APK ready: {output_apk}")
+    else:
+        print(f"[package] APK ready: {signed}")
 
 
 def build_apk(args: argparse.Namespace) -> None:
@@ -1134,7 +1213,7 @@ def stage_assets(args: argparse.Namespace) -> None:
         if not required.is_dir():
             fail(f"required original asset directory missing: {required}")
 
-    work_root = ROOT / "build" / "staging"
+    work_root = resolve_build_root(args) / "staging"
 
     if work_root.exists():
         shutil.rmtree(work_root)
@@ -1699,7 +1778,7 @@ def native_build(args: argparse.Namespace) -> None:
     if not box2d.is_dir():
         fail(f"Box2D source missing: {box2d}")
 
-    build_dir = ROOT / "build" / "android-arm64"
+    build_dir = resolve_build_root(args) / "android-arm64"
 
     if args.clean and build_dir.exists():
         print(f"[build] removing {build_dir}")
@@ -1779,6 +1858,10 @@ def add_common_options(parser: argparse.ArgumentParser) -> None:
         default=DEFAULT_NDK_VERSION,
         help=f"Pinned SDK/ndk version (default: {DEFAULT_NDK_VERSION}).",
     )
+    parser.add_argument(
+        "--build-root",
+        help="Build output root. Defaults to the repository's build/ directory.",
+    )
 
 
 def make_parser() -> argparse.ArgumentParser:
@@ -1835,6 +1918,10 @@ def make_parser() -> argparse.ArgumentParser:
             "Falls back to ANGRY_BIRDS_ORIGINAL_ROOT."
         ),
     )
+    stage_parser.add_argument(
+        "--build-root",
+        help="Build output root. Defaults to the repository's build/ directory.",
+    )
 
     stage_parser.set_defaults(func=stage_assets)
 
@@ -1884,6 +1971,23 @@ def make_parser() -> argparse.ArgumentParser:
     )
 
     apk_parser.set_defaults(func=build_apk)
+
+    package_parser = sub.add_parser(
+        "package",
+        help="Package staged assets and a prebuilt ARM64 runtime into a signed APK.",
+    )
+    package_parser.add_argument("--android-sdk", help="Android SDK root; also reads ANDROID_SDK_ROOT and ANDROID_HOME.")
+    package_parser.add_argument("--build-tools-version", help="Require a particular Android Build Tools version.")
+    package_parser.add_argument("--platform-api", type=int, help="Require a particular Android platform API.")
+    package_parser.add_argument("--build-root", help="Isolated build output root.")
+    package_parser.add_argument("--original-root", required=True, help="Extracted original game tree used for launcher resources.")
+    package_parser.add_argument("--native-library", required=True, help="A verified arm64-v8a libangryarm64.so.")
+    package_parser.add_argument("--launcher-icon", help="Explicit original launcher icon PNG.")
+    package_parser.add_argument("--keystore", required=True, help="User-local APK signing keystore.")
+    package_parser.add_argument("--keystore-alias", default="angry-birds-arm64-user", help="Signing key alias.")
+    package_parser.add_argument("--keystore-password-file", required=True, help="Temporary single-line password file, removed by caller after signing.")
+    package_parser.add_argument("--output-apk", required=True, help="New output APK path. Existing files are never replaced.")
+    package_parser.set_defaults(func=package_debug_apk)
 
     return parser
 

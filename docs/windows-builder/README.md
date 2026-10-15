@@ -8,6 +8,8 @@ the original Angry Birds Classic Android 1.4.2 (version code 142) APK.
 - Use a 64-bit Windows PC.
 - Obtain the original APK yourself. The builder checks its package, version,
   ARM32 libraries, and SHA-256 before extracting anything.
+- This preview accepts only SHA-256
+  `2524167c113d967c5efd40640387482201a14c06124f70f2d1700fff1839d5ed`.
 - Install a Java 17 or newer JDK.
 - Install Android SDK Platform 35 and Android SDK Build Tools 35.0.0 with the
   official Android Studio SDK Manager, then accept Google's Android SDK terms.
@@ -30,7 +32,8 @@ runtime used internally by the existing staging and packaging scripts.
 
 The builder keeps temporary extracted resources under your local application
 data folder and removes the per-run workspace when the build ends. It never
-changes the original APK. Existing output files are never replaced.
+changes the original APK. The default output folder is Downloads. Existing
+output files are never replaced.
 
 ## Signing key
 

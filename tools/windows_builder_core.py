@@ -124,8 +124,12 @@ def extract_launcher_icon(apk_path: Path, destination: Path) -> Path:
     return destination
 
 
-def output_path_for(apk_path: Path) -> Path:
-    base = apk_path.with_name("angry-birds-classic-1.4.2-arm64.apk")
+def output_path_for(_apk_path: Path, output_directory: Path | None = None) -> Path:
+    if output_directory is None:
+        downloads = Path.home() / "Downloads"
+        output_directory = downloads if downloads.is_dir() else Path.home()
+    output_directory = output_directory.expanduser().resolve()
+    base = output_directory / "angry-birds-classic-1.4.2-arm64.apk"
     if not base.exists():
         return base
     for index in range(2, 1000):

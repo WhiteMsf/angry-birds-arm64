@@ -74,7 +74,7 @@ class WindowsBuilderCoreTests(unittest.TestCase):
             source.touch()
             existing = Path(temporary) / "angry-birds-classic-1.4.2-arm64.apk"
             existing.write_bytes(b"keep")
-            self.assertEqual(core.output_path_for(source).name, "angry-birds-classic-1.4.2-arm64-2.apk")
+            self.assertEqual(core.output_path_for(source, Path(temporary)).name, "angry-birds-classic-1.4.2-arm64-2.apk")
             self.assertEqual(existing.read_bytes(), b"keep")
 
     def test_runtime_library_must_be_aarch64_elf(self) -> None:

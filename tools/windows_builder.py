@@ -387,8 +387,8 @@ def build_once(
 def run_gui() -> None:
     root = tk.Tk()
     root.title(APP_NAME)
-    root.geometry("720x500")
-    root.minsize(640, 420)
+    root.geometry("760x600")
+    root.minsize(700, 560)
 
     apk_value = tk.StringVar()
     output_value = tk.StringVar()
@@ -404,7 +404,7 @@ def run_gui() -> None:
             "Build an ARM64 APK locally. The selected APK and game assets stay on this computer. "
             "Only the validated Angry Birds Classic 1.4.2 (142) APK is supported."
         ),
-        wraplength=660,
+        wraplength=700,
     ).pack(anchor="w", pady=(8, 16))
 
     row = ttk.Frame(frame)
@@ -440,9 +440,8 @@ def run_gui() -> None:
 
     ttk.Button(output_row, text="Save as…", command=choose_output).pack(side="left", padx=(8, 0))
     progress = ttk.Progressbar(frame, mode="indeterminate")
-    progress.pack(fill="x", pady=(14, 8))
     ttk.Label(frame, textvariable=status_value).pack(anchor="w")
-    log = tk.Text(frame, height=16, wrap="word", state="disabled", font=("Consolas", 9))
+    log = tk.Text(frame, height=11, wrap="word", state="disabled", font=("Consolas", 9))
     log.pack(fill="both", expand=True, pady=(8, 12))
 
     button = ttk.Button(frame, text="Build ARM64 APK")
@@ -463,12 +462,14 @@ def run_gui() -> None:
                     status_value.set(message.splitlines()[0][:140])
                 elif kind == "done":
                     progress.stop()
+                    progress.pack_forget()
                     button.configure(state="normal")
                     output, digest = message.split("\n", 1)
                     status_value.set("Build finished and verified.")
                     messagebox.showinfo(APP_NAME, f"{output}\n\n{digest}")
                 elif kind == "error":
                     progress.stop()
+                    progress.pack_forget()
                     button.configure(state="normal")
                     status_value.set("Build failed. See the details below.")
                     messagebox.showerror(APP_NAME, message)
@@ -482,6 +483,7 @@ def run_gui() -> None:
             messagebox.showerror(APP_NAME, "Choose an existing APK file first.")
             return
         button.configure(state="disabled")
+        progress.pack(fill="x", pady=(14, 8))
         progress.start(12)
         status_value.set("Preparing the local build…")
         append("--- New build ---")

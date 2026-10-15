@@ -2,6 +2,9 @@
 
 This repository contains or relies on third-party software. The original
 copyright and license files shipped with those components remain authoritative.
+The top-level MIT License applies only to project-authored work within the
+scope described in [`LICENSE.md`](LICENSE.md); it does not replace or expand
+the licenses below.
 
 ## Lua 5.1.5
 
@@ -39,6 +42,10 @@ and:
 
 `docs/dependencies/BOX2D-SOURCE-NOTE.md`
 
+Project-authored patch and build scripts do not relicense the resulting
+vendored Box2D files. The modified Box2D source remains subject to the original
+Box2D license and altered-source notice.
+
 ## KA3D / Pixelgene
 
 KA3D source code is not redistributed in this public repository.
@@ -48,6 +55,10 @@ during reconstruction work. Compatibility behavior that remains in the
 current runtime is implemented separately and is not described as a
 clean-room implementation.
 
+Historical experiments, reverse-engineering reports, and provenance-sensitive
+materials are excluded from the MIT grant unless a specific file is separately
+identified as project-authored and licensed.
+
 References to KA3D in runtime diagnostics, file-format names, historical
 research notes, or compatibility descriptions do not imply that the KA3D
 source tree itself is included.
@@ -56,6 +67,11 @@ source tree itself is included.
 
 Original Angry Birds game assets, original APK material, saves and signing
 material are not intended to be part of this source repository.
+
+The two illustrative GIFs under `docs/media/` show gameplay captures. They are
+excluded from the MIT grant and may contain original game artwork or other
+content owned by Rovio Entertainment or its respective rights holders. This
+repository does not provide a license to that content.
 
 Angry Birds, Rovio and related names and marks belong to their respective
 rights holders. This project is an independent preservation,

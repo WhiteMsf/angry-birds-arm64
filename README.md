@@ -1,5 +1,15 @@
 # Angry Birds ARM64
 
+## License
+
+Original project-authored runtime, tooling, tests, and documentation are
+available under the MIT License, subject to the exclusions in
+[`LICENSE.md`](LICENSE.md). The MIT grant does not cover vendored dependencies,
+historical research materials, gameplay captures, or Angry Birds assets,
+code, data, and trademarks. See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)
+for Lua, Box2D, and other third-party provenance. This is a scoped license,
+not a declaration that every file in the repository has the same license.
+
 A source reconstruction of **Angry Birds 1.4.2 for Android**, targeting modern
 **64-bit ARM (AArch64 / arm64-v8a)** devices.
 
@@ -75,10 +85,14 @@ The repository contains the reconstructed native runtime, Android build and
 packaging tooling, compatibility code, vendored build dependencies, research
 material, and the historical development record.
 
-It does **not** intentionally distribute:
+It does **not** distribute the original game APK, extracted game-data set, or
+individual original game asset files.
+The two illustrative GIFs under `docs/media/` contain gameplay captures; they
+remain outside the MIT grant and may include original protected game content.
 
-- original Angry Birds game assets;
-- the original Angry Birds APK;
+The repository does **not** intentionally distribute:
+
+- the original Angry Birds asset set;
 - personal save data;
 - signing keys or keystores.
 

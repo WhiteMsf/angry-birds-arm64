@@ -2,6 +2,11 @@
 
 This repository is an **independent ARM64 reconstruction and preservation project** for the classic Android release of *Angry Birds*. It is not an official Rovio project.
 
+The project-authored components are licensed only within the scope described
+in [`LICENSE.md`](LICENSE.md). These credits do not claim ownership of or grant
+rights to original game content, third-party software, or materials of
+uncertain historical provenance.
+
 The goal of the project is to make the classic Android game run on modern ARM64 Android devices while preserving the behavior of the original release as closely as practical. The project deliberately separates the **original game and its content** from the **independent reconstruction, compatibility, tooling, and validation work** performed here.
 
 ## Original game

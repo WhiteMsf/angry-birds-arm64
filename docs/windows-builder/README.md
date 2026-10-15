@@ -23,8 +23,8 @@ runtime used internally by the existing staging and packaging scripts.
 ## Build your APK
 
 1. Download and extract
-   [`AngryBirds-ARM64-Builder-Preview.zip`](https://github.com/WhiteMsf/angry-birds-arm64/releases/download/builder-preview-v0.1.0/AngryBirds-ARM64-Builder-Preview.zip)
-   from the [preview release](https://github.com/WhiteMsf/angry-birds-arm64/releases/tag/builder-preview-v0.1.0).
+   [`AngryBirds-ARM64-Builder-Preview.zip`](https://github.com/WhiteMsf/angry-birds-arm64/releases/download/builder-preview-v0.1.1/AngryBirds-ARM64-Builder-Preview.zip)
+   from the [0.1.1 preview release](https://github.com/WhiteMsf/angry-birds-arm64/releases/tag/builder-preview-v0.1.1).
 2. Verify the ZIP with the adjacent `.sha256` file.
 3. Run `AngryBirdsArm64Builder.exe`. The executable is unsigned, so Windows may
    show a publisher warning; check the release checksum before opening it.
@@ -59,9 +59,9 @@ This is a preview, not a supported production release. The generated app is a
 debuggable experimental port. It is not affiliated with Rovio. Do not share
 the original APK, extracted game data, or the private signing key.
 
-The packaged conversion pipeline passed end-to-end validation. The GUI window
-and file-picker interaction still need visual review on an interactive Windows
-desktop.
+The packaged conversion pipeline and main window passed review on Windows.
+The 0.1.1 release fixes a clipped build button and hides the progress bar until
+a build starts. The file-picker dialog was not visually exercised here.
 
 ## Troubleshooting
 

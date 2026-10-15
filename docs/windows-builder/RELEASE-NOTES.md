@@ -20,6 +20,9 @@ a local APK from the original Angry Birds Classic Android 1.4.2 (142) APK.
 - The single validated original APK hash documented by the builder. No other
   game version is supported by this preview.
 - The executable is not code-signed; Windows may display a publisher warning.
+- The conversion pipeline passed end-to-end validation, but the GUI window and
+  file-picker interaction have not yet been visually reviewed on an
+  interactive Windows desktop.
 - APK creation is local. The builder does not transmit the original APK or
   extracted resources.
 - The APK is an experimental, debuggable reconstruction, not affiliated with

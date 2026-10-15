@@ -12,6 +12,26 @@ The result is a native ARM64 build of the classic Android game: its original
 Lua logic and locally supplied game data run on a reconstructed modern Android
 runtime instead of the original ARMv7 binary.
 
+## Windows Builder Preview
+
+The project is preparing a Windows GUI package that uses a prebuilt ARM64
+runtime. It accepts only the verified original Android APK **1.4.2 (142)** and
+keeps its APK and resources local. The preview does not require Python or the
+Android NDK, but it currently requires Java 17+ and Android SDK Platform 35
+with Build Tools 35.0.0 installed. It is therefore not a one-click installer.
+
+The end-to-end flow has passed on the maintainer's Windows environment. A clean
+Windows package validation and public builder release are still pending; the
+builder is not yet advertised as ready for general users. See
+[`docs/windows-builder/README.md`](docs/windows-builder/README.md) for the
+current preview requirements and
+[`docs/windows-builder/DEVELOPERS.md`](docs/windows-builder/DEVELOPERS.md) for
+the build pipeline and package process.
+
+This is an experimental preservation project, not an official Rovio product.
+Users must supply their own original game APK. Do not upload APKs, game data,
+save files, or private signing keys in issues or pull requests.
+
 ![Angry Birds ARM64 gameplay](docs/media/angry-birds-arm64-gameplay.gif)
 
 > This is an independent preservation and compatibility project. It is not
@@ -198,6 +218,10 @@ Current limitations and caveats include:
 Known fidelity work is tracked in `ROADMAP.md`. For subsystem-level confidence,
 evidence, and remaining validation targets, see `FIDELITY.md`. Contribution and
 fidelity-reporting guidance is in `CONTRIBUTING.md`.
+
+Bug reports should use the [GitHub bug report form](.github/ISSUE_TEMPLATE/bug_report.yml)
+and include device, Android version, original APK version/hash, reproduction
+steps, and relevant logs. Do not attach the APK or extracted game resources.
 
 ## Licensing and third-party software
 

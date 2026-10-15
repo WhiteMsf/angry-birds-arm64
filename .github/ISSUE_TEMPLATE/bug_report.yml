@@ -1,0 +1,74 @@
+name: Bug report
+description: Report a reproducible runtime or Windows builder problem.
+title: "[Bug]: "
+labels: [bug, needs-triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is an experimental independent reconstruction and is not affiliated with Rovio.
+        Never attach the original APK, extracted game data, save files, or signing keys.
+  - type: input
+    id: device
+    attributes:
+      label: Device model
+      description: For example, Galaxy S24 FE or Pixel 8.
+      placeholder: Manufacturer and model
+    validations:
+      required: true
+  - type: input
+    id: android
+    attributes:
+      label: Android version
+      description: Include the Android version and build number if available.
+      placeholder: Android 15, build ...
+    validations:
+      required: true
+  - type: input
+    id: original_apk
+    attributes:
+      label: Original APK used
+      description: Give the version code/name and SHA-256 only. Do not upload the APK.
+      placeholder: Angry Birds 1.4.2 (142), SHA-256 ...
+    validations:
+      required: true
+  - type: input
+    id: builder_version
+    attributes:
+      label: Builder or project version
+      description: Include the release name or Git commit if known.
+      placeholder: ARM64 Builder Preview ...
+    validations:
+      required: false
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: List the actions that lead to the problem.
+      placeholder: |
+        1. Open ...
+        2. Select ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected_actual
+    attributes:
+      label: Expected and actual result
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Remove account names or other private paths before posting. Do not attach APKs or resource files.
+      render: text
+    validations:
+      required: false
+  - type: textarea
+    id: additional
+    attributes:
+      label: Screenshots or other context
+      description: Screenshots are optional. Avoid including personal data.
+    validations:
+      required: false

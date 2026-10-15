@@ -22,13 +22,22 @@ runtime used internally by the existing staging and packaging scripts.
 
 ## Build your APK
 
-1. Download and extract `AngryBirds-ARM64-Builder-Preview.zip` from the
-   project's Releases page.
+1. Download and extract
+   [`AngryBirds-ARM64-Builder-Preview.zip`](https://github.com/WhiteMsf/angry-birds-arm64/releases/download/builder-preview-v0.1.0/AngryBirds-ARM64-Builder-Preview.zip)
+   from the [preview release](https://github.com/WhiteMsf/angry-birds-arm64/releases/tag/builder-preview-v0.1.0).
 2. Verify the ZIP with the adjacent `.sha256` file.
-3. Run `AngryBirdsArm64Builder.exe`.
+3. Run `AngryBirdsArm64Builder.exe`. The executable is unsigned, so Windows may
+   show a publisher warning; check the release checksum before opening it.
 4. Select your original 1.4.2 APK, choose a new output path, and select
    **Build ARM64 APK**.
-5. Install the resulting APK on an ARM64 Android device.
+5. Copy the resulting APK to an ARM64 Android device, open it in the device's
+   file manager, and confirm installation. Android may ask you to allow app
+   installs from that file manager.
+
+The resulting app uses package `dev.angryarm64.stage24` and contains only
+`arm64-v8a` native code. Its signature is unique to your Windows user. If
+Android refuses to update another copy because the signing certificates differ,
+uninstall that older build first; uninstalling can remove its app data.
 
 The builder keeps temporary extracted resources under your local application
 data folder and removes the per-run workspace when the build ends. It never

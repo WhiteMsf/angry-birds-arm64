@@ -14,15 +14,16 @@ runtime instead of the original ARMv7 binary.
 
 ## Windows Builder Preview
 
-The project is preparing a Windows GUI package that uses a prebuilt ARM64
-runtime. It accepts only the verified original Android APK **1.4.2 (142)** and
-keeps its APK and resources local. The preview does not require Python or the
-Android NDK, but it currently requires Java 17+ and Android SDK Platform 35
-with Build Tools 35.0.0 installed. It is therefore not a one-click installer.
+The [Windows Builder Preview](https://github.com/WhiteMsf/angry-birds-arm64/releases/tag/builder-preview-v0.1.0)
+uses a prebuilt ARM64 runtime and accepts only the verified original Android
+APK **1.4.2 (142)**. It keeps the APK and game resources on your computer. The
+package includes Python and does not require the Android NDK, but it currently
+requires Java 17+ and Android SDK Platform 35 with Build Tools 35.0.0 installed
+manually. It is a preview tool, not a one-click installer.
 
-The end-to-end flow has passed on the maintainer's Windows environment. A clean
-Windows package validation and public builder release are still pending; the
-builder is not yet advertised as ready for general users. See
+The packaged executable passed an end-to-end test on Windows using the real
+local APK, an isolated SDK installation, and the CI-built runtime. It generated
+an ARM64 APK and passed signature and payload checks. See
 [`docs/windows-builder/README.md`](docs/windows-builder/README.md) for the
 current preview requirements and
 [`docs/windows-builder/DEVELOPERS.md`](docs/windows-builder/DEVELOPERS.md) for

@@ -59,6 +59,10 @@ This is a preview, not a supported production release. The generated app is a
 debuggable experimental port. It is not affiliated with Rovio. Do not share
 the original APK, extracted game data, or the private signing key.
 
+The packaged conversion pipeline passed end-to-end validation. The GUI window
+and file-picker interaction still need visual review on an interactive Windows
+desktop.
+
 ## Troubleshooting
 
 - **Original APK rejected:** this preview accepts only the locally validated

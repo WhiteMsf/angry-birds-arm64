@@ -23,7 +23,9 @@ manually. It is a preview tool, not a one-click installer.
 
 The packaged executable passed an end-to-end test on Windows using the real
 local APK, an isolated SDK installation, and the CI-built runtime. It generated
-an ARM64 APK and passed signature and payload checks. See
+an ARM64 APK and passed signature and payload checks. The conversion pipeline
+was exercised through the executable's build mode, but the GUI window and file
+picker could not be visually reviewed in this environment. See
 [`docs/windows-builder/README.md`](docs/windows-builder/README.md) for the
 current preview requirements and
 [`docs/windows-builder/DEVELOPERS.md`](docs/windows-builder/DEVELOPERS.md) for

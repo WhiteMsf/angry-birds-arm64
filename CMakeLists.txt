@@ -39,6 +39,13 @@ if(NOT ANDROID)
         COMMAND presentation_geometry_tests
     )
 
+    find_package(Python3 REQUIRED COMPONENTS Interpreter)
+    add_test(
+        NAME loading_page_render_contract
+        COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tools/stage24_loading_render_contract.py"
+    )
+
     return()
 endif()
 

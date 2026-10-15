@@ -16256,6 +16256,10 @@ static bool stage24313UiNeedle(const std::string& page, const char* sprite, floa
     return mainSettings || golden || seamFamily || animatedTarget;
 }
 
+static bool stage24IsLoadingMode(const std::string& mode) {
+    return mode == "updateLoading" || mode == "updateLoadingEx";
+}
+
 class Stage235GpuRenderer {
 public:
     static constexpr int W = 480;
@@ -17983,17 +17987,21 @@ public:
     bool renderSnapshot(int frame,
                         lua_State* L,
                         const PhysicsBridge& physics,
-                        const SpriteDB& sprites) {
+                        const SpriteDB& sprites,
+                        const std::string& stage24PreUpdateMode) {
         if (display == EGL_NO_DISPLAY || context == EGL_NO_CONTEXT) return false;
         stage24283ActiveFrame = frame;
         stage24283ActiveLua = L;
         menuSprites = &sprites;
         const std::string stage24283Mode = stage24_global_lua_function_name(L, "currentGameMode");
         const std::string stage24283Page = table_field_table_name(L, "currentMenuPage");
+        const bool stage24283LoadingFrame =
+            stage24IsLoadingMode(stage24PreUpdateMode) || stage24IsLoadingMode(stage24283Mode);
         const bool stage24284GameplayOverlay =
             stage24283Mode == "updateMenu" && stage24284IsGameplayOverlayPage(stage24283Page);
         const bool stage24284FullFrameMenu =
-            stage24283Mode == "updateMenu" && !stage24283Page.empty() && !stage24284GameplayOverlay;
+            !stage24283LoadingFrame && stage24283Mode == "updateMenu" &&
+            !stage24283Page.empty() && !stage24284GameplayOverlay;
         const bool stage24283MenuOwned = stage24284FullFrameMenu;
         if (stage24283Mode == "updateMenu" && !stage24283Page.empty()) {
             static std::string stage24284LastClassifiedPage;
@@ -19835,16 +19843,17 @@ public:
         // Stage24.23.1 proved MENU_BUTTON input routes through untouched
         // updateGame()->goToMenu(); once that state machine selects pause, do
         // not synthesize another UI. Pass the Lua-selected page to drawMenu().
-        const std::string stage24229VisibleMenuPage =
+        std::string stage24229VisibleMenuPage =
             table_field_table_name(L, "currentMenuPage");
+        if (stage24283LoadingFrame) stage24229VisibleMenuPage = "loading";
         // Stage 24.28.1: the giant inventory proved that Main Menu, Episode
         // Selection and every Level Selection page are ordinary pages consumed
         // by the same untouched drawMenu() closure already proven for pause and
         // terminal pages.  Lift the historical three-page allow-list: whenever
         // original Lua owns updateMenu and selected a concrete currentMenuPage,
         // render that exact page.  No page contents or callbacks are synthesized.
-        if (stage24_global_lua_function_name(L, "currentGameMode") == "updateMenu" &&
-            !stage24229VisibleMenuPage.empty()) {
+        if ((stage24283Mode == "updateMenu" && !stage24229VisibleMenuPage.empty()) ||
+            stage24283LoadingFrame) {
             static std::string stage24229LastRenderedPage;
             static int stage24229PageFrame = 0;
             if (stage24229VisibleMenuPage != stage24229LastRenderedPage) {
@@ -19872,11 +19881,34 @@ public:
                 lua_pushcfunction(L, traced_error_handler);
                 drawErrFunc = lua_gettop(L);
             }
+
+            // Original updateLoading/updateLoadingEx call the public drawMenu
+            // before this frame's clear. Stage24 keeps that public closure
+            // headless, so replay the untouched closure here, after the clear.
+            // drawMenu selects loadingPage only while the original global
+            // `loading` is true; preserve its post-update value around this
+            // single presentation call.
+            int stage24283SavedLoading = 0;
+            if (stage24283LoadingFrame) {
+                lua_getglobal(L, "loading");
+                stage24283SavedLoading = lua_gettop(L);
+                lua_pushboolean(L, 1);
+                lua_setglobal(L, "loading");
+            }
+            auto stage24283RestoreLoading = [&]() {
+                if (!stage24283SavedLoading) return;
+                lua_pushvalue(L, stage24283SavedLoading);
+                lua_setglobal(L, "loading");
+                lua_remove(L, stage24283SavedLoading);
+                stage24283SavedLoading = 0;
+            };
+
             lua_getglobal(L, "__stage24_original_drawMenu");
             if (!lua_isfunction(L, -1) || lua_iscfunction(L, -1)) {
                 std::fprintf(stderr, "[stage24.13.2-menu] original drawMenu alias unavailable type=%s\n",
                              luaL_typename(L, -1));
                 lua_pop(L, 1);
+                stage24283RestoreLoading();
                 stage24133RestoreGamePresentation();
                 gStage24132MenuRenderer = nullptr;
                 gStage24132AuditActive = false;
@@ -19884,13 +19916,15 @@ public:
             }
             if (lua_pcall(L, 0, 0, drawErrFunc) != 0) {
                 const char* e = lua_tostring(L, -1);
+                const std::string drawError = e ? e : "<no message>";
+                lua_pop(L, 1);
+                stage24283RestoreLoading();
                 std::fprintf(stderr,
                     "[stage24.13.2-menu] FAIL frame=%d lastProto=%s pc=%d primitiveCalls=%d error=%s\n",
                     frame, proto_name(gLastLuaProto), gLastLuaPc,
-                    gStage24130PrimitiveCalls, e ? e : "<no message>");
+                    gStage24130PrimitiveCalls, drawError.c_str());
                 S24E("Stage24.13.2 visible drawMenu FAIL frame=%d lastProto=%s pc=%d error=%s",
-                     frame, proto_name(gLastLuaProto), gLastLuaPc, e ? e : "<no message>");
-                lua_pop(L, 1);
+                     frame, proto_name(gLastLuaProto), gLastLuaPc, drawError.c_str());
                 if (drawErrFunc) lua_remove(L, drawErrFunc);
                 lua_sethook(L, nullptr, 0, 0);
                 stage24133RestoreGamePresentation();
@@ -19898,9 +19932,17 @@ public:
                 gStage24132AuditActive = false;
                 return false;
             }
+            stage24283RestoreLoading();
             if (drawErrFunc) lua_remove(L, drawErrFunc);
             lua_sethook(L, nullptr, 0, 0);
             stage24133RestoreGamePresentation();
+            if (stage24283LoadingFrame && firstMenuFrame) {
+                std::printf(
+                    "[stage24.49.0-loading-page] PASS frame=%d preMode='%s' postMode='%s' "
+                    "page='loading' renderer=UNTOUCHED_drawMenu textGlyphDraws=%d gpuDraws=%d missingSprites=%d\n",
+                    frame, stage24PreUpdateMode.c_str(), stage24283Mode.c_str(),
+                    gStage24134FrameGpuTextDraws, stage24132MenuDraws(), stage24132MenuMissing());
+            }
             if (gStage24134MenuFrameSerial < 150 &&
                 (gStage24134MenuFrameSerial < 12 || (gStage24134MenuFrameSerial % 15) == 0)) {
                 std::printf(
@@ -24013,7 +24055,8 @@ setGameMode(updateGame)
         }
 
 
-        if (!gpuScene.renderSnapshot(frame, L, physics, sprites)) {
+        if (!gpuScene.renderSnapshot(frame, L, physics, sprites,
+                                     stage24133PreUpdateMode)) {
             std::fprintf(stderr, "[angry-stage24] LIVE GPU frame FAIL frame=%d\n", frame);
             S24E("live GPU frame failed at frame=%d", frame);
             lua_close(L);
